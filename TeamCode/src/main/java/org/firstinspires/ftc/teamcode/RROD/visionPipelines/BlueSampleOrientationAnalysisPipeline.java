@@ -30,6 +30,7 @@ import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -48,6 +49,9 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
     Mat thresholdMat = new Mat();
     Mat morphedThreshold = new Mat();
     Mat contoursOnPlainImageMat = new Mat();
+
+    public static Rect intakeArea = new Rect();
+    public static boolean intersect = false;
 
     /*
      * Threshold values
@@ -123,6 +127,8 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
     {
         // We'll be updating this with new data below
         internalSampleList.clear();
+        Size inputSize = input.size();
+        intakeArea = new Rect((int)(inputSize.width / 4), (int)(inputSize.height / 4), (int)((inputSize.width) / 2), (int)(inputSize.height) / 2);
 
         /*
          * Run the image processing
@@ -133,6 +139,7 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
         }
 
         clientSampleList = new ArrayList<>(internalSampleList);
+        Imgproc.rectangle(input, intakeArea, new Scalar (0, 100, 0));
 
         /*
          * Decide which buffer to send to the viewport
@@ -164,6 +171,7 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
                 return contoursOnPlainImageMat;
             }
         }
+
 
         return input;
     }
@@ -277,7 +285,7 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
         }
 
 
-        drawTagText(rotatedRectFitToContour, Integer.toString((int) Math.round(angle))+" deg", input);
+        drawTagText(rotatedRectFitToContour, Integer.toString((int) Math.round(angle))+" deg" + " " + intersect, input);
 
         AnalyzedSample analyzedSample = new AnalyzedSample();
         analyzedSample.angle = rotRectAngle;
@@ -381,7 +389,7 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
                 1); // Font thickness
     }
 
-    static void drawRotatedRect(RotatedRect rect, Mat drawOn)
+    static boolean drawRotatedRect(RotatedRect rect, Mat drawOn)
     {
         /*
          * Draws a rotated rect by drawing each of the 4 lines individually
@@ -390,9 +398,26 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
         Point[] points = new Point[4];
         rect.points(points);
 
+        intersect = false;
+
+
         for(int i = 0; i < 4; ++i)
         {
             Imgproc.line(drawOn, points[i], points[(i+1)%4], BLUE, 2);
+
+
+            if(((points[i].y > intakeArea.y && points[i].y < intakeArea.y + intakeArea.height)
+                    || (points[(i+1)%4].y > intakeArea.y && points[(i+1)%4].y < intakeArea.y + intakeArea.height))
+                    &&((points[i].x > intakeArea.x && points[i].x < intakeArea.x + intakeArea.width)
+                    || (points[(i+1)%4].x > intakeArea.x && points[(i+1)%4].x < intakeArea.x + intakeArea.width))
+            ){
+                intersect = true;
+                Imgproc.line(drawOn, points[i], points[(i+1)%4], GREEN, 2);
+
+            }
+
         }
+        return intersect;
+
     }
 }
