@@ -17,7 +17,6 @@ import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Config
-@Disabled
 @Autonomous(name = "ExampleInCode", group = "Autonomous")
 public class Red extends LinearOpMode {
     public PoseHolder Pose;
