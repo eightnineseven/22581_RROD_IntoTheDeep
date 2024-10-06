@@ -11,6 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.RROD.visionPipelines.BlueSampleOrientationAnalysisPipeline;
+import org.firstinspires.ftc.teamcode.RROD.visionPipelines.RedSampleOrientationAnalysisPipeline;
+
 import com.arcrobotics.ftclib.controller.PIDController;
 
 @TeleOp
@@ -19,6 +22,7 @@ public class Teleop extends LinearOpMode {
     private PIDController controller;
     public static double p = 0, i = 0, d = 0;
     public static double f = 0;
+    public BlueSampleOrientationAnalysisPipeline vision = new BlueSampleOrientationAnalysisPipeline();
 
     public static double target = 0;
 
@@ -137,6 +141,10 @@ public class Teleop extends LinearOpMode {
             if(gamepad1.x){
                 target = resting_pos;
             }
+            telemetry.addData("X diff: ", vision.getXDifference());
+            telemetry.addData("Y diff: ", vision.getYDifference());
+            telemetry.update();
+
             
             
         }

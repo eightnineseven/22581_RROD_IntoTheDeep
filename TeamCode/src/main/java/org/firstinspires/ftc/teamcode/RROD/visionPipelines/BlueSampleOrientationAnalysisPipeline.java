@@ -418,12 +418,7 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
             ){
                 intersect = true;
                 Imgproc.line(drawOn, points[i], points[(i+1)%4], GREEN, 2);
-
             }
-
-
-
-
         }
         if(!intersect){
             double xMidIntake = intakeArea.x + 0.5 * intakeArea.width;
@@ -440,12 +435,11 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
 
              Imgproc.line(drawOn, midSample, midIntake, RED, 1);
         }
-
     }
-    public static double getYDifference(){
+    public double getYDifference(){
         return yChange;
     }
-    public static double getXDifference(){
+    public double getXDifference(){
         return xChange;
     }
 }
