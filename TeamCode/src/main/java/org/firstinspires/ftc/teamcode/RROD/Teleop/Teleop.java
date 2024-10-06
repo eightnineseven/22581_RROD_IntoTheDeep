@@ -143,7 +143,9 @@ public class Teleop extends LinearOpMode {
             }
             telemetry.addData("X diff: ", vision.getXDifference());
             telemetry.addData("Y diff: ", vision.getYDifference());
-            telemetry.update();
+            //TODO: Red vs blue in teleop with global variables
+
+
 
             
             
