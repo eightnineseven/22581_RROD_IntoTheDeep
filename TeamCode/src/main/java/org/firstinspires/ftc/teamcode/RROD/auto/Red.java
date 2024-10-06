@@ -11,11 +11,13 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Config
+@Disabled
 @Autonomous(name = "ExampleInCode", group = "Autonomous")
 public class Red extends LinearOpMode {
     public PoseHolder Pose;
