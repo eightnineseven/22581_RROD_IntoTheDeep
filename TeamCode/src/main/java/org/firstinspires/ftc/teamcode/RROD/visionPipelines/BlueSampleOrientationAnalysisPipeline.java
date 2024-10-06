@@ -425,9 +425,8 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
             double yMidIntake = intakeArea.y + 0.5 * intakeArea.height;
 
 
-            //TODO: Do calculation for the midpoint
-            double xMidSample = 0;
-            double yMidSample = 0;
+            double xMidSample = points[1].x + points[3]. x / 2;
+            double yMidSample = points[1].y + points[3].y / 2;
 
              xChange = xMidSample - xMidIntake;
              yChange = yMidSample - yMidIntake;
