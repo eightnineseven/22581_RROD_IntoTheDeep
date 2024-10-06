@@ -42,10 +42,14 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
     public static Rect intakeArea = new Rect();
     public static boolean intersect = false;
 
+    public static double yChange;
+    public static double xChange;
+
     /*
      * Threshold values
      */
     static final int CB_CHAN_MASK_THRESHOLD = 160;
+    static final int PIXELS_PER_INCH = 2/1280;
 
 
     /*
@@ -122,11 +126,18 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
         /*
          * Run the image processing
          */
+        double samplesInRange = 0;
         for(MatOfPoint contour : findContours(input))
         {
             analyzeContour(contour, input);
+            if(intersect){
+                samplesInRange++;
+            }
         }
+        if(samplesInRange==0){
 
+
+        }
         clientSampleList = new ArrayList<>(internalSampleList);
         Imgproc.rectangle(input, intakeArea, new Scalar (0, 100, 0));
 
@@ -280,6 +291,10 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
         analyzedSample.angle = rotRectAngle;
         internalSampleList.add(analyzedSample);
 
+
+
+
+
     }
 
     static class ContourRegionAnalysis
@@ -378,7 +393,7 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
                 1); // Font thickness
     }
 
-    static boolean drawRotatedRect(RotatedRect rect, Mat drawOn)
+    static void drawRotatedRect(RotatedRect rect, Mat drawOn)
     {
         /*
          * Draws a rotated rect by drawing each of the 4 lines individually
@@ -392,6 +407,7 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
 
         for(int i = 0; i < 4; ++i)
         {
+
             Imgproc.line(drawOn, points[i], points[(i+1)%4], BLUE, 2);
 
 
@@ -405,8 +421,31 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
 
             }
 
-        }
-        return intersect;
 
+
+
+        }
+        if(!intersect){
+            double xMidIntake = intakeArea.x + 0.5 * intakeArea.width;
+            double yMidIntake = intakeArea.y + 0.5 * intakeArea.height;
+
+            double xMidSample = 0;
+            double yMidSample = 0;
+
+             xChange = xMidSample - xMidIntake;
+             yChange = yMidSample - yMidIntake;
+
+             Point midSample = new Point(xMidSample, yMidSample);
+             Point midIntake = new Point(xMidIntake, yMidIntake);
+
+             Imgproc.line(drawOn, midSample, midIntake, RED, 1);
+        }
+
+    }
+    public static double getYDifference(){
+        return yChange;
+    }
+    public static double getXDifference(){
+        return xChange;
     }
 }

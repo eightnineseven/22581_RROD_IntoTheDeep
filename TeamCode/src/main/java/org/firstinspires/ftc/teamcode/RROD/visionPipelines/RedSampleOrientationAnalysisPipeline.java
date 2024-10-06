@@ -21,6 +21,8 @@
 
 package org.firstinspires.ftc.teamcode.RROD.visionPipelines;
 
+import com.sun.tools.javac.comp.Todo;
+
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -404,6 +406,8 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
                 Imgproc.line(drawOn, points[i], points[(i+1)%4], GREEN, 2);
 
             }
+
+            //TODO: reflect Blue vision code
 
         }
         return intersect;
