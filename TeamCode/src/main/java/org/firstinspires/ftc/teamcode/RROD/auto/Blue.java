@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -106,7 +107,7 @@ public class Blue extends LinearOpMode {
 
         Action beforePlow1Traj;
         beforePlow1Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforeSample1)
+                .strafeTo(Pose.beforeSample1Pos)
                 .build();
 
         Action plow1Traj;
@@ -176,12 +177,12 @@ public class Blue extends LinearOpMode {
 
     }
     public static void armPID(){
-            controller.setPID(p, i, d);
-            int armPos = armPivot.getCurrentPosition();
-            double pid = controller.calculate(armPos, target);
-            double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
-            double power = pid + ff;
-            armPivot.setPower(power);
+        controller.setPID(p, i, d);
+        int armPos = armPivot.getCurrentPosition();
+        double pid = controller.calculate(armPos, target);
+        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
+        double power = pid + ff;
+        armPivot.setPower(power);
 
 
 

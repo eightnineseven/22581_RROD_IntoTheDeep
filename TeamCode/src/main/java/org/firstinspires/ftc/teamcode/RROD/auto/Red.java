@@ -5,13 +5,11 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Pose2dDual;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -82,58 +80,64 @@ public class Red extends LinearOpMode {
 
 
 
+
+
+
+
+
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(Pose.startPos.x, Pose.startPos.y, Math.toRadians(180)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-Pose.startPos.x, -Pose.startPos.y, Math.toRadians(0)));
         intakeMechanisms intakeMechanisms = new intakeMechanisms(hardwareMap);
 
 
 
+        // vision here that outputs position
 
 
         Action preloadTraj;
         preloadTraj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.preloadPos)
+                .strafeTo(new Vector2d(-Pose.preloadPos.x, -Pose.preloadPos.y))
                 .build();
 
         Action intermediate1;
         intermediate1 = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforePlowPos)
+                .strafeTo(new Vector2d(-Pose.beforePlowPos.x, -Pose.beforePlowPos.y))
                 .build();
 
         Action beforePlow1Traj;
         beforePlow1Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforeSample1)
+                .strafeTo(new Vector2d(-Pose.beforeSample1Pos.x, -Pose.beforeSample1Pos.y))
                 .build();
 
         Action plow1Traj;
         plow1Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.plowSample1Pos)
+                .strafeTo(new Vector2d(-Pose.plowSample1Pos.x, -Pose.plowSample1Pos.y))
                 .build();
 
         Action beforePlow2Traj;
         beforePlow2Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforeSample2Pos)
+                .strafeTo(new Vector2d(-Pose.beforeSample2Pos.x, -Pose.beforeSample2Pos.y))
                 .build();
 
         Action plow2Traj;
         plow2Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.plowSample2Pos)
+                .strafeTo(new Vector2d(-Pose.plowSample2Pos.x, -Pose.plowSample2Pos.y))
                 .build();
 
         Action beforePlow3Traj;
         beforePlow3Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforeSample3Pos)
+                .strafeTo(new Vector2d(-Pose.beforeSample3Pos.x, -Pose.beforeSample3Pos.y))
                 .build();
 
         Action plow3Traj;
         plow3Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.plowSample3Pos)
+                .strafeTo(new Vector2d(-Pose.plowSample3Pos.x, -Pose.plowSample3Pos.y))
                 .build();
 
         Action parkTraj;
         parkTraj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.parkPos)
+                .strafeTo(new Vector2d(-Pose.parkPos.x, -Pose.parkPos.y))
                 .build();
 
 
@@ -173,12 +177,12 @@ public class Red extends LinearOpMode {
 
     }
     public static void armPID(){
-        controller.setPID(p, i, d);
-        int armPos = armPivot.getCurrentPosition();
-        double pid = controller.calculate(armPos, target);
-        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
-        double power = pid + ff;
-        armPivot.setPower(power);
+            controller.setPID(p, i, d);
+            int armPos = armPivot.getCurrentPosition();
+            double pid = controller.calculate(armPos, target);
+            double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
+            double power = pid + ff;
+            armPivot.setPower(power);
 
 
 

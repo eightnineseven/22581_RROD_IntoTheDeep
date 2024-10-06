@@ -10,7 +10,7 @@ public class PoseHolder {
      Vector2d startPos = new Vector2d(0-robotWidth,72-robotLength );
      Vector2d preloadPos = new Vector2d(-7,-36 );
      Vector2d beforePlowPos = new Vector2d(-15,-42 );
-     Vector2d beforeSample1 = new Vector2d(-48,-7 );
+     Vector2d beforeSample1Pos = new Vector2d(-48,-7 );
      Vector2d plowSample1Pos = new Vector2d(-48,-60 );
      Vector2d beforeSample2Pos = new Vector2d(-60+robotWidth,-7 );
      Vector2d plowSample2Pos = new Vector2d(-60,-60 );
