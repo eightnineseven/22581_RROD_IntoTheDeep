@@ -49,7 +49,9 @@ public class Blue extends LinearOpMode {
                 intakePivot.setPosition(0);
                 armAngle = resting_pos;
                 target = armAngle;
-                armPID();
+                while(armAngle >= armPivot.getCurrentPosition()+10 || armAngle<= armPivot.getCurrentPosition()) {
+                    armPID();
+                }
 
                 return false;
             }
@@ -65,7 +67,9 @@ public class Blue extends LinearOpMode {
                 intakePivot.setPosition(0);
                 armAngle = high_chamber_pos;
                 target = armAngle;
-                armPID();
+                while(armAngle >= armPivot.getCurrentPosition()+10 || armAngle<= armPivot.getCurrentPosition()) {
+                    armPID();
+                }
                 return false;
             }
         }
