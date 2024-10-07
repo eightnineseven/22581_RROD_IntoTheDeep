@@ -119,6 +119,8 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline {
             CB_CHAN_IDX = 1;
             CB_CHAN_MASK_THRESHOLD = 185;
         } else {
+            CB_CHAN_IDX = 2;
+            CB_CHAN_MASK_THRESHOLD = 160;
             
         }
         // We'll be updating this with new data below
