@@ -45,10 +45,13 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline {
     public static double yChange;
     public static double xChange;
 
+    public static GLOBALS globals;
+
     /*
      * Threshold values
      */
-    static final int CB_CHAN_MASK_THRESHOLD = 185;
+   // static final int CB_CHAN_MASK_THRESHOLD = 185;
+    public static int CB_CHAN_MASK_THRESHOLD;
     static final double DENSITY_UPRIGHT_THRESHOLD = 0.03;
 
     /*
@@ -67,7 +70,8 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline {
     static final Scalar BLUE = new Scalar(0, 0, 255);
 
     static final int CONTOUR_LINE_THICKNESS = 2;
-    static final int CB_CHAN_IDX = 1;
+    //static final int CB_CHAN_IDX = 1;
+    public static int CB_CHAN_IDX;
 
     static class AnalyzedSample {
         double angle;
@@ -111,6 +115,12 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        if(globals.getAllianceColor==ALLIANCE.BLUE){
+            CB_CHAN_IDX = 1;
+            CB_CHAN_MASK_THRESHOLD = 185;
+        } else {
+            
+        }
         // We'll be updating this with new data below
         internalSampleList.clear();
         Size inputSize = input.size();
