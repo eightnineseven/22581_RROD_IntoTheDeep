@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.RROD.util.GLOBALS;
 import org.firstinspires.ftc.teamcode.RROD.visionPipelines.BlueSampleOrientationAnalysisPipeline;
 import org.firstinspires.ftc.teamcode.RROD.visionPipelines.RedSampleOrientationAnalysisPipeline;
 
@@ -22,8 +23,9 @@ public class Teleop extends LinearOpMode {
     private PIDController controller;
     public static double p = 0, i = 0, d = 0;
     public static double f = 0;
-    public BlueSampleOrientationAnalysisPipeline vision = new BlueSampleOrientationAnalysisPipeline();
-
+    public GLOBALS globals;
+    public BlueSampleOrientationAnalysisPipeline blueVision = new BlueSampleOrientationAnalysisPipeline();
+    public RedSampleOrientationAnalysisPipeline redVision = new RedSampleOrientationAnalysisPipeline();
     public static double target = 0;
 
     private final double ticks_in_degree = 537.7/180;
@@ -141,9 +143,18 @@ public class Teleop extends LinearOpMode {
             if(gamepad1.x){
                 target = resting_pos;
             }
-            telemetry.addData("X diff: ", vision.getXDifference());
-            telemetry.addData("Y diff: ", vision.getYDifference());
-            //TODO: Red vs blue in teleop with global variables
+
+            //TODO: add camera to opmode
+            if(globals.getAllianceColor()== GLOBALS.ALLIANCE.BLUE){
+                telemetry.addData("X diff: ", blueVision.getBlueXDifference());
+                telemetry.addData("Y diff: ", blueVision.getBlueYDifference());
+                telemetry.update();
+            } else{
+                telemetry.addData("X diff: ", redVision.getRedXDifference());
+                telemetry.addData("Y diff: ", redVision.getRedYDifference());
+                telemetry.update();
+
+            }
 
 
 

@@ -428,19 +428,24 @@ public class BlueSampleOrientationAnalysisPipeline extends OpenCvPipeline
             double xMidSample = points[1].x + points[3]. x / 2;
             double yMidSample = points[1].y + points[3].y / 2;
 
-             xChange = xMidSample - xMidIntake;
-             yChange = yMidSample - yMidIntake;
+            if(Math.sqrt(Math.pow((xMidSample-xMidIntake),2)+Math.pow(yMidSample-yMidIntake,2))   <   Math.sqrt(Math.pow(xChange,2)+Math.pow(yChange,2))) {
+                xChange = xMidSample - xMidIntake;
+                yChange = yMidSample - yMidIntake;
+            }
 
              Point midSample = new Point(xMidSample, yMidSample);
              Point midIntake = new Point(xMidIntake, yMidIntake);
 
              Imgproc.line(drawOn, midSample, midIntake, RED, 1);
+        } else{
+            xChange=0;
+            yChange=0;
         }
     }
-    public double getYDifference(){
+    public double getBlueYDifference(){
         return yChange;
     }
-    public double getXDifference(){
+    public double getBlueXDifference(){
         return xChange;
     }
 }

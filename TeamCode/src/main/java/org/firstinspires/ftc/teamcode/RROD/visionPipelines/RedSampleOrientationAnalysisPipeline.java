@@ -31,8 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
-{
+public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline {
     /*
      * Our working image buffers
      */
@@ -43,6 +42,8 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
 
     public static Rect intakeArea = new Rect();
     public static boolean intersect = false;
+    public static double yChange;
+    public static double xChange;
 
     /*
      * Threshold values
@@ -68,11 +69,9 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
     static final int CONTOUR_LINE_THICKNESS = 2;
     static final int CB_CHAN_IDX = 1;
 
-    static class AnalyzedSample
-    {
+    static class AnalyzedSample {
         double angle;
     }
-
 
 
     ArrayList<AnalyzedSample> internalSampleList = new ArrayList<>();
@@ -81,8 +80,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
     /*
      * Some stuff to handle returning our various buffers
      */
-    enum Stage
-    {
+    enum Stage {
         FINAL,
         Cb,
         MASK,
@@ -96,8 +94,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
     int stageNum = 0;
 
     @Override
-    public void onViewportTapped()
-    {
+    public void onViewportTapped() {
         /*
          * Note that this method is invoked from the UI thread
          * so whatever we do here, we must do quickly.
@@ -105,8 +102,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
 
         int nextStageNum = stageNum + 1;
 
-        if(nextStageNum >= stages.length)
-        {
+        if (nextStageNum >= stages.length) {
             nextStageNum = 0;
         }
 
@@ -114,51 +110,43 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
     }
 
     @Override
-    public Mat processFrame(Mat input)
-    {
+    public Mat processFrame(Mat input) {
         // We'll be updating this with new data below
         internalSampleList.clear();
         Size inputSize = input.size();
-        intakeArea = new Rect((int)(inputSize.width / 4), (int)(inputSize.height / 4), (int)((inputSize.width) / 2), (int)(inputSize.height) / 2);
+        intakeArea = new Rect((int) (inputSize.width / 4), (int) (inputSize.height / 4), (int) ((inputSize.width) / 2), (int) (inputSize.height) / 2);
 
         /*
          * Run the image processing
          */
-        for(MatOfPoint contour : findContours(input))
-        {
+        for (MatOfPoint contour : findContours(input)) {
             analyzeContour(contour, input);
         }
 
         clientSampleList = new ArrayList<>(internalSampleList);
-        Imgproc.rectangle(input, intakeArea, new Scalar (0, 100, 0));
+        Imgproc.rectangle(input, intakeArea, new Scalar(0, 100, 0));
 
         /*
          * Decide which buffer to send to the viewport
          */
-        switch (stages[stageNum])
-        {
-            case Cb:
-            {
+        switch (stages[stageNum]) {
+            case Cb: {
                 return cbMat;
             }
 
-            case FINAL:
-            {
+            case FINAL: {
                 return input;
             }
 
-            case MASK:
-            {
+            case MASK: {
                 return thresholdMat;
             }
 
-            case MASK_NR:
-            {
+            case MASK_NR: {
                 return morphedThreshold;
             }
 
-            case CONTOURS:
-            {
+            case CONTOURS: {
                 return contoursOnPlainImageMat;
             }
         }
@@ -167,13 +155,11 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         return input;
     }
 
-    public ArrayList<AnalyzedSample> getDetectedSamples()
-    {
+    public ArrayList<AnalyzedSample> getDetectedSamples() {
         return clientSampleList;
     }
 
-    ArrayList<MatOfPoint> findContours(Mat input)
-    {
+    ArrayList<MatOfPoint> findContours(Mat input) {
         // A list we'll be using to store the contours we find
         ArrayList<MatOfPoint> contoursList = new ArrayList<>();
 
@@ -195,8 +181,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         return contoursList;
     }
 
-    void morphMask(Mat input, Mat output)
-    {
+    void morphMask(Mat input, Mat output) {
         /*
          * Apply some erosion and dilation for noise reduction
          */
@@ -208,8 +193,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         Imgproc.dilate(output, output, dilateElement);
     }
 
-    void analyzeContour(MatOfPoint contour, Mat input)
-    {
+    void analyzeContour(MatOfPoint contour, Mat input) {
         // Transform the contour to a different format
         Point[] points = contour.toArray();
         MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
@@ -221,8 +205,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         // The angle OpenCV gives us can be ambiguous, so look at the shape of
         // the rectangle to fix that.
         double rotRectAngle = rotatedRectFitToContour.angle;
-        if (rotatedRectFitToContour.size.width < rotatedRectFitToContour.size.height)
-        {
+        if (rotatedRectFitToContour.size.width < rotatedRectFitToContour.size.height) {
             rotRectAngle += 90;
         }
 
@@ -233,18 +216,14 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         // We're going to split the this contour into two regions: one region for the points
         // which fall above the midline, and one region for the points which fall below.
         // We'll need a place to store the points as we split them, so we make ArrayLists
-        ArrayList<Point> aboveMidline = new ArrayList<>(points.length/2);
-        ArrayList<Point> belowMidline = new ArrayList<>(points.length/2);
+        ArrayList<Point> aboveMidline = new ArrayList<>(points.length / 2);
+        ArrayList<Point> belowMidline = new ArrayList<>(points.length / 2);
 
         // Ok, now actually split the contour into those two regions we discussed earlier!
-        for(Point p : points)
-        {
-            if(rotatedRectFitToContour.center.y - p.y > midlineSlope * (rotatedRectFitToContour.center.x - p.x))
-            {
+        for (Point p : points) {
+            if (rotatedRectFitToContour.center.y - p.y > midlineSlope * (rotatedRectFitToContour.center.x - p.x)) {
                 aboveMidline.add(p);
-            }
-            else
-            {
+            } else {
                 belowMidline.add(p);
             }
         }
@@ -254,8 +233,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         ContourRegionAnalysis aboveMidlineMetrics = analyzeContourRegion(aboveMidline);
         ContourRegionAnalysis belowMidlineMetrics = analyzeContourRegion(belowMidline);
 
-        if(aboveMidlineMetrics == null || belowMidlineMetrics == null)
-        {
+        if (aboveMidlineMetrics == null || belowMidlineMetrics == null) {
             return; // Get out of dodge
         }
 
@@ -269,14 +247,13 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
          */
 
 
-
         double angle = (rotRectAngle);
-        if(angle>90){
-            angle = -(angle -180);
+        if (angle > 90) {
+            angle = -(angle - 180);
         }
 
 
-        drawTagText(rotatedRectFitToContour, Integer.toString((int) Math.round(angle))+" deg" + " " + intersect, input);
+        drawTagText(rotatedRectFitToContour, Integer.toString((int) Math.round(angle)) + " deg" + " " + intersect, input);
 
         AnalyzedSample analyzedSample = new AnalyzedSample();
         analyzedSample.angle = rotRectAngle;
@@ -284,8 +261,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
 
     }
 
-    static class ContourRegionAnalysis
-    {
+    static class ContourRegionAnalysis {
         /*
          * This class holds the results of analyzeContourRegion()
          */
@@ -296,8 +272,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         List<MatOfPoint> listHolderOfMatOfPoint;
     }
 
-    static ContourRegionAnalysis analyzeContourRegion(ArrayList<Point> contourPoints)
-    {
+    static ContourRegionAnalysis analyzeContourRegion(ArrayList<Point> contourPoints) {
         // drawContours() requires a LIST of contours (there's no singular drawContour()
         // method), so we have to make a list, even though we're only going to use a single
         // position in it...
@@ -310,8 +285,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         Imgproc.convexHull(matOfPoint, hullMatOfInt);
 
         // Was the convex hull calculation successful?
-        if(hullMatOfInt.toArray().length > 0)
-        {
+        if (hullMatOfInt.toArray().length > 0) {
             // The convex hull calculation tells us the INDEX of the points which
             // which were passed in eariler which form the convex hull. That's all
             // well and good, but now we need filter out that original list to find
@@ -319,8 +293,7 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
             Point[] hullPoints = new Point[hullMatOfInt.rows()];
             List<Integer> hullContourIdxList = hullMatOfInt.toList();
 
-            for (int i = 0; i < hullContourIdxList.size(); i++)
-            {
+            for (int i = 0; i < hullContourIdxList.size(); i++) {
                 hullPoints[i] = contourPoints.get(hullContourIdxList.get(i));
             }
 
@@ -338,15 +311,12 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
             analysis.density = analysis.contourArea / analysis.hullArea;
 
             return analysis;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    static Point computeDisplacementForSecondPointOfSampleOrientationLine(RotatedRect rect, double unambiguousAngle)
-    {
+    static Point computeDisplacementForSecondPointOfSampleOrientationLine(RotatedRect rect, double unambiguousAngle) {
         // Note: we return a point, but really it's not a point in space, we're
         // simply using it to hold X & Y displacement values from the middle point
         // of the bounding rect.
@@ -360,28 +330,26 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
 
         // The line is to be drawn at 90 deg relative to the midline running through
         // the rect lengthwise
-        point.x = (int) (lineLength * Math.cos(Math.toRadians(unambiguousAngle+90)));
-        point.y = (int) (lineLength * Math.sin(Math.toRadians(unambiguousAngle+90)));
+        point.x = (int) (lineLength * Math.cos(Math.toRadians(unambiguousAngle + 90)));
+        point.y = (int) (lineLength * Math.sin(Math.toRadians(unambiguousAngle + 90)));
 
         return point;
     }
 
-    static void drawTagText(RotatedRect rect, String text, Mat mat)
-    {
+    static void drawTagText(RotatedRect rect, String text, Mat mat) {
         Imgproc.putText(
                 mat, // The buffer we're drawing on
                 text, // The text we're drawing
                 new Point( // The anchor point for the text
-                        rect.center.x-20,  // x anchor point
-                        rect.center.y+25), // y anchor point
+                        rect.center.x - 20,  // x anchor point
+                        rect.center.y + 25), // y anchor point
                 Imgproc.FONT_HERSHEY_PLAIN, // Font
                 1, // Font size
                 TEAL, // Font color
                 1); // Font thickness
     }
 
-    static boolean drawRotatedRect(RotatedRect rect, Mat drawOn)
-    {
+    static void drawRotatedRect(RotatedRect rect, Mat drawOn) {
         /*
          * Draws a rotated rect by drawing each of the 4 lines individually
          */
@@ -392,25 +360,48 @@ public class RedSampleOrientationAnalysisPipeline extends OpenCvPipeline
         intersect = false;
 
 
-        for(int i = 0; i < 4; ++i)
-        {
-            Imgproc.line(drawOn, points[i], points[(i+1)%4], BLUE, 2);
+        for (int i = 0; i < 4; ++i) {
+            Imgproc.line(drawOn, points[i], points[(i + 1) % 4], BLUE, 2);
 
 
-            if(((points[i].y > intakeArea.y && points[i].y < intakeArea.y + intakeArea.height)
-                    || (points[(i+1)%4].y > intakeArea.y && points[(i+1)%4].y < intakeArea.y + intakeArea.height))
-                    &&((points[i].x > intakeArea.x && points[i].x < intakeArea.x + intakeArea.width)
-                    || (points[(i+1)%4].x > intakeArea.x && points[(i+1)%4].x < intakeArea.x + intakeArea.width))
-            ){
+            if (((points[i].y > intakeArea.y && points[i].y < intakeArea.y + intakeArea.height)
+                    || (points[(i + 1) % 4].y > intakeArea.y && points[(i + 1) % 4].y < intakeArea.y + intakeArea.height))
+                    && ((points[i].x > intakeArea.x && points[i].x < intakeArea.x + intakeArea.width)
+                    || (points[(i + 1) % 4].x > intakeArea.x && points[(i + 1) % 4].x < intakeArea.x + intakeArea.width))
+            ) {
                 intersect = true;
-                Imgproc.line(drawOn, points[i], points[(i+1)%4], GREEN, 2);
+                Imgproc.line(drawOn, points[i], points[(i + 1) % 4], GREEN, 2);
 
             }
 
             //TODO: reflect Blue vision code
 
-        }
-        return intersect;
+            if (!intersect) {
+                double xMidIntake = intakeArea.x + 0.5 * intakeArea.width;
+                double yMidIntake = intakeArea.y + 0.5 * intakeArea.height;
 
+
+                double xMidSample = points[1].x + points[3].x / 2;
+                double yMidSample = points[1].y + points[3].y / 2;
+                if(Math.sqrt(Math.pow((xMidSample-xMidIntake),2)+Math.pow(yMidSample-yMidIntake,2))   <   Math.sqrt(Math.pow(xChange,2)+Math.pow(yChange,2))) {
+                    xChange = xMidSample - xMidIntake;
+                    yChange = yMidSample - yMidIntake;
+                }
+
+                Point midSample = new Point(xMidSample, yMidSample);
+                Point midIntake = new Point(xMidIntake, yMidIntake);
+
+                Imgproc.line(drawOn, midSample, midIntake, RED, 1);
+            }else{
+                xChange=0;
+                yChange=0;
+            }
+        }
     }
-}
+        public double getRedYDifference() {
+            return yChange;
+        }
+        public double getRedXDifference() {
+            return xChange;
+        }
+    }

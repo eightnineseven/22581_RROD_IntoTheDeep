@@ -7,18 +7,20 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.RROD.util.PoseHolder;
+import org.firstinspires.ftc.teamcode.RROD.util.GLOBALS;
 
 @Config
 @Autonomous(name = "ExampleInCode", group = "Autonomous")
 public class Blue extends LinearOpMode {
     public PoseHolder Pose;
+    public GLOBALS globals;
     public double armAngle;
     public static DcMotor armPivot;
     public static PIDController controller;
@@ -31,6 +33,7 @@ public class Blue extends LinearOpMode {
 
     public static int high_chamber_pos = 0;
     public static int resting_pos = 0;
+
 
 
 
@@ -92,8 +95,10 @@ public class Blue extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(Pose.startPos.x, Pose.startPos.y, Math.toRadians(180)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(Pose.startPos().x, Pose.startPos().y, Math.toRadians(180)));
         intakeMechanisms intakeMechanisms = new intakeMechanisms(hardwareMap);
+        globals.setAllianceColor(GLOBALS.ALLIANCE.BLUE);
+
 
 
 
@@ -102,47 +107,47 @@ public class Blue extends LinearOpMode {
 
         Action preloadTraj;
         preloadTraj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.preloadPos)
+                .strafeTo(Pose.preloadPos())
                 .build();
 
         Action intermediate1;
         intermediate1 = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforePlowPos)
+                .strafeTo(Pose.beforePlowPos())
                 .build();
 
         Action beforePlow1Traj;
         beforePlow1Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforeSample1Pos)
+                .strafeTo(Pose.beforeSample1Pos())
                 .build();
 
         Action plow1Traj;
         plow1Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.plowSample1Pos)
+                .strafeTo(Pose.plowSample1Pos())
                 .build();
 
         Action beforePlow2Traj;
         beforePlow2Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforeSample2Pos)
+                .strafeTo(Pose.beforeSample2Pos())
                 .build();
 
         Action plow2Traj;
         plow2Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.plowSample2Pos)
+                .strafeTo(Pose.plowSample2Pos())
                 .build();
 
         Action beforePlow3Traj;
         beforePlow3Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.beforeSample3Pos)
+                .strafeTo(Pose.beforeSample3Pos())
                 .build();
 
         Action plow3Traj;
         plow3Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.plowSample3Pos)
+                .strafeTo(Pose.plowSample3Pos())
                 .build();
 
         Action parkTraj;
         parkTraj = drive.actionBuilder(drive.pose)
-                .strafeTo(Pose.parkPos)
+                .strafeTo(Pose.parkPos())
                 .build();
 
 

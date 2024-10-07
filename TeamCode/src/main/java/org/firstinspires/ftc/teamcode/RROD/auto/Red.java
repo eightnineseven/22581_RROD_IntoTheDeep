@@ -14,11 +14,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.RROD.util.GLOBALS;
+import org.firstinspires.ftc.teamcode.RROD.util.PoseHolder;
 
 @Config
 @Autonomous(name = "ExampleInCode", group = "Autonomous")
 public class Red extends LinearOpMode {
     public PoseHolder Pose;
+    public GLOBALS globals;
     public double armAngle;
     public static DcMotor armPivot;
     public static PIDController controller;
@@ -81,19 +84,11 @@ public class Red extends LinearOpMode {
     }
 
 
-
-
-
-
-
-
-
-
-
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-Pose.startPos.x, -Pose.startPos.y, Math.toRadians(0)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-Pose.startPos().x, -Pose.startPos().y, Math.toRadians(0)));
         intakeMechanisms intakeMechanisms = new intakeMechanisms(hardwareMap);
+        globals.setAllianceColor(GLOBALS.ALLIANCE.RED);
 
 
 
@@ -102,47 +97,47 @@ public class Red extends LinearOpMode {
 
         Action preloadTraj;
         preloadTraj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.preloadPos.x, -Pose.preloadPos.y))
+                .strafeTo(new Vector2d(-Pose.preloadPos().x, -Pose.preloadPos().y))
                 .build();
 
         Action intermediate1;
         intermediate1 = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.beforePlowPos.x, -Pose.beforePlowPos.y))
+                .strafeTo(new Vector2d(-Pose.beforePlowPos().x, -Pose.beforePlowPos().y))
                 .build();
 
         Action beforePlow1Traj;
         beforePlow1Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.beforeSample1Pos.x, -Pose.beforeSample1Pos.y))
+                .strafeTo(new Vector2d(-Pose.beforeSample1Pos().x, -Pose.beforeSample1Pos().y))
                 .build();
 
         Action plow1Traj;
         plow1Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.plowSample1Pos.x, -Pose.plowSample1Pos.y))
+                .strafeTo(new Vector2d(-Pose.plowSample1Pos().x, -Pose.plowSample1Pos().y))
                 .build();
 
         Action beforePlow2Traj;
         beforePlow2Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.beforeSample2Pos.x, -Pose.beforeSample2Pos.y))
+                .strafeTo(new Vector2d(-Pose.beforeSample2Pos().x, -Pose.beforeSample2Pos().y))
                 .build();
 
         Action plow2Traj;
         plow2Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.plowSample2Pos.x, -Pose.plowSample2Pos.y))
+                .strafeTo(new Vector2d(-Pose.plowSample2Pos().x, -Pose.plowSample2Pos().y))
                 .build();
 
         Action beforePlow3Traj;
         beforePlow3Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.beforeSample3Pos.x, -Pose.beforeSample3Pos.y))
+                .strafeTo(new Vector2d(-Pose.beforeSample3Pos().x, -Pose.beforeSample3Pos().y))
                 .build();
 
         Action plow3Traj;
         plow3Traj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.plowSample3Pos.x, -Pose.plowSample3Pos.y))
+                .strafeTo(new Vector2d(-Pose.plowSample3Pos().x, -Pose.plowSample3Pos().y))
                 .build();
 
         Action parkTraj;
         parkTraj = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-Pose.parkPos.x, -Pose.parkPos.y))
+                .strafeTo(new Vector2d(-Pose.parkPos().x, -Pose.parkPos().y))
                 .build();
 
 
