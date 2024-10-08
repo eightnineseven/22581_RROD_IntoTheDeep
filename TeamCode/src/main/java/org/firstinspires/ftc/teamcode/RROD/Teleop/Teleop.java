@@ -11,8 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RROD.util.GLOBALS;
-import org.firstinspires.ftc.teamcode.RROD.visionPipelines.BlueSampleOrientationAnalysisPipeline;
-import org.firstinspires.ftc.teamcode.RROD.visionPipelines.RedSampleOrientationAnalysisPipeline;
+import org.firstinspires.ftc.teamcode.RROD.visionPipelines.SampleOrientationAnalysisPipeline;
 
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -24,8 +23,8 @@ public class Teleop extends LinearOpMode {
     public static double p = 0, i = 0, d = 0;
     public static double f = 0;
     public GLOBALS globals;
-    public BlueSampleOrientationAnalysisPipeline blueVision = new BlueSampleOrientationAnalysisPipeline();
-    public RedSampleOrientationAnalysisPipeline redVision = new RedSampleOrientationAnalysisPipeline();
+
+    public SampleOrientationAnalysisPipeline sampleOrientation = new SampleOrientationAnalysisPipeline();
     public static double target = 0;
 
     private final double ticks_in_degree = 537.7/180;
@@ -168,16 +167,13 @@ public class Teleop extends LinearOpMode {
             }
 
             //TODO: add camera to opmode
-            if(globals.getAllianceColor()== GLOBALS.ALLIANCE.BLUE){
-                telemetry.addData("X diff: ", blueVision.getBlueXDifference());
-                telemetry.addData("Y diff: ", blueVision.getBlueYDifference());
-                telemetry.update();
-            } else{
-                telemetry.addData("X diff: ", redVision.getRedXDifference());
-                telemetry.addData("Y diff: ", redVision.getRedYDifference());
+
+                telemetry.addData("X diff: ", sampleOrientation.getRedXDifference());
+                telemetry.addData("Y diff: ", sampleOrientation.getRedYDifference());
+                telemetry.addData("Angle: ", sampleOrientation.getAngle());
                 telemetry.update();
 
-            }
+
 
 
 
