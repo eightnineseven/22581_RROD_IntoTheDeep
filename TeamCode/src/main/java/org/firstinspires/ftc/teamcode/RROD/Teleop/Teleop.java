@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,6 +15,7 @@ import org.firstinspires.ftc.teamcode.RROD.visionPipelines.BlueSampleOrientation
 import org.firstinspires.ftc.teamcode.RROD.visionPipelines.RedSampleOrientationAnalysisPipeline;
 
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 @Config
@@ -32,9 +32,12 @@ public class Teleop extends LinearOpMode {
 
     public static int prep_state = 0;
     public static int high_chamber_pos = 0;
-    public static int plow_pos = 0;
+    public static int pickup_pos = 0;
     public static int resting_pos = 0;
     public boolean prep_state_cycle = true;
+    public double servoPos = 0;
+    public boolean outtaking= false;
+    public boolean intaking = false;
 
     private DcMotor arm_motor;
     @Override
@@ -50,6 +53,8 @@ public class Teleop extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         arm_motor = hardwareMap.dcMotor.get("motor_eh_2");
+
+        Servo claw = hardwareMap.servo.get("servo_eh_1");
 
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
@@ -130,18 +135,36 @@ public class Teleop extends LinearOpMode {
             if(gamepad1.a && prep_state_cycle){
                 target = prep_state;
                 prep_state_cycle = false;
+                outtaking = false;
+                intaking = true;
             } else if(gamepad1.a){
                 target = prep_state - 3;
+                outtaking = false;
+                intaking = true;
                 prep_state_cycle = true;
             }
             if(gamepad1.y){
+                intaking = false;
+                outtaking = true;
                 target = high_chamber_pos;
+
             }
             if(gamepad1.b){
-            target = plow_pos;
+            claw.setPosition(0);
+            intaking = false;
+            outtaking = false;
+
             }
             if(gamepad1.x){
                 target = resting_pos;
+                intaking = false;
+                outtaking = false;
+            }
+            if(intaking){
+                servoPos = 90 - (target/ticks_in_degree);
+            }
+            if(outtaking){
+                servoPos = 200 - (target/ticks_in_degree);
             }
 
             //TODO: add camera to opmode
