@@ -20,23 +20,22 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class Teleop extends LinearOpMode {
     private PIDController controller;
-    public static double p = 0, i = 0, d = 0;
-    public static double f = 0;
+    public static double p = 0.003, i = 0, d = 0.0004;
+    public static double f = 0.34;
     public GLOBALS globals;
 
-    public SampleOrientationAnalysisPipeline sampleOrientation = new SampleOrientationAnalysisPipeline();
+//    public SampleOrientationAnalysisPipeline sampleOrientation = new SampleOrientationAnalysisPipeline();
     public static double target = 0;
 
     private final double ticks_in_degree = 537.7/180;
 
-    public static int prep_state = 0;
+    public static int prep_state = 90;
     public static int high_chamber_pos = 0;
     public static int pickup_pos = 0;
-    public static int resting_pos = 0;
+    public static int resting_pos = 180;
     public boolean prep_state_cycle = true;
     public double servoPos = 0;
-    public boolean outtaking= false;
-    public boolean intaking = false;
+
 
     private DcMotor arm_motor;
     @Override
@@ -45,15 +44,15 @@ public class Teleop extends LinearOpMode {
         // Make sure your ID's match your configuration
         DcMotor frontLeftMotor = hardwareMap.dcMotor.get("motor_ch_0");
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("motor_ch_1");
-        DcMotor frontRightMotor = hardwareMap.dcMotor.get("motor_eh_0");
-        DcMotor backRightMotor = hardwareMap.dcMotor.get("motor_eh_1");
+        DcMotor frontRightMotor = hardwareMap.dcMotor.get("motor_ch_2");
+        DcMotor backRightMotor = hardwareMap.dcMotor.get("motor_ch_3");
 
         controller = new PIDController(p,i,d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        arm_motor = hardwareMap.dcMotor.get("motor_eh_2");
+        arm_motor = hardwareMap.dcMotor.get("motor_eh_0");
 
-        Servo claw = hardwareMap.servo.get("servo_eh_1");
+        Servo claw = hardwareMap.servo.get("servo_ch_0");
 
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
@@ -67,7 +66,7 @@ public class Teleop extends LinearOpMode {
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
 
@@ -134,44 +133,34 @@ public class Teleop extends LinearOpMode {
             if(gamepad1.a && prep_state_cycle){
                 target = prep_state;
                 prep_state_cycle = false;
-                outtaking = false;
-                intaking = true;
+
             } else if(gamepad1.a){
                 target = prep_state - 3;
-                outtaking = false;
-                intaking = true;
+
                 prep_state_cycle = true;
             }
             if(gamepad1.y){
-                intaking = false;
-                outtaking = true;
+
                 target = high_chamber_pos;
 
             }
             if(gamepad1.b){
             claw.setPosition(0);
-            intaking = false;
-            outtaking = false;
+
 
             }
             if(gamepad1.x){
                 target = resting_pos;
-                intaking = false;
-                outtaking = false;
+
             }
-            if(intaking){
-                servoPos = 90 - (target/ticks_in_degree);
-            }
-            if(outtaking){
-                servoPos = 200 - (target/ticks_in_degree);
-            }
+
 
             //TODO: add camera to opmode
 
-                telemetry.addData("X diff: ", sampleOrientation.getRedXDifference());
-                telemetry.addData("Y diff: ", sampleOrientation.getRedYDifference());
-                telemetry.addData("Angle: ", sampleOrientation.getAngle());
-                telemetry.update();
+//                telemetry.addData("X diff: ", sampleOrientation.getRedXDifference());
+//                telemetry.addData("Y diff: ", sampleOrientation.getRedYDifference());
+//                telemetry.addData("Angle: ", sampleOrientation.getAngle());
+//                telemetry.update();
 
 
 
