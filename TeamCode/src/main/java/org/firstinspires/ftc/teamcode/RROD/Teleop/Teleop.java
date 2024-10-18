@@ -3,22 +3,24 @@ package org.firstinspires.ftc.teamcode.RROD.Teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
+
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import org.firstinspires.ftc.teamcode.RROD.util.GLOBALS;
 
 @TeleOp
 @Config
 public class Teleop extends LinearOpMode {
     private PIDController controller;
+    GoBildaPinpointDriverRR odo;
     public static double p = 0.007, i = 0, d = 0.00085;
     public static double f = 0.36;
     public GLOBALS globals;
@@ -68,13 +70,7 @@ public class Teleop extends LinearOpMode {
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
-        IMU imu = hardwareMap.get(IMU.class, "imu");
-        // Adjust the orientation parameters to match your robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
+
 
 
         //PID:
@@ -90,7 +86,7 @@ public class Teleop extends LinearOpMode {
             double pid = controller.calculate(armPos,target);
             double ff = Math.cos(Math.toRadians(target/ticks_in_degree))*f;
             double power = pid +ff;
-//            arm_motor.setPower(power);
+           arm_motor.setPower(power);
             arm_motor.setPower(0);
 
             telemetry.addData("pos: ", armPos);
@@ -111,10 +107,10 @@ public class Teleop extends LinearOpMode {
             // it can be freely changed based on preference.
             // The equivalent button is start on Xbox-style controllers.
             if (gamepad1.options) {
-                imu.resetYaw();
+                odo.recalibrateIMU();
             }
 
-            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            double botHeading = Math.toRadians(odo.getHeading());
 
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -171,7 +167,7 @@ public class Teleop extends LinearOpMode {
                 clawR.setPosition(0.15);
             }
 
-                arm_motor.setPower(gamepad1.left_trigger);
+
 
 
 

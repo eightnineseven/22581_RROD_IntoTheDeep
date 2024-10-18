@@ -55,13 +55,15 @@ public class SampleOrientationAnalysisPipeline extends OpenCvPipeline {
     public static boolean isChanged;
     public static double angleOfSample;
     public static boolean isAPieceReady = false;
-
+    public static Point midIntake;
+    public static Point midSample;
     public static GLOBALS globals;
+
 
     /*
      * Threshold values
      */
-   // static final int CB_CHAN_MASK_THRESHOLD = 185;
+    // static final int CB_CHAN_MASK_THRESHOLD = 185;
     public static int CB_CHAN_MASK_THRESHOLD;
     static final double DENSITY_UPRIGHT_THRESHOLD = 0.03;
 
@@ -126,14 +128,14 @@ public class SampleOrientationAnalysisPipeline extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        if(globals.getAllianceColor() == GLOBALS.ALLIANCE.BLUE){
-            CB_CHAN_IDX = 1;
-            CB_CHAN_MASK_THRESHOLD = 185;
-        } else {
+        if(globals.getAllianceColor()== GLOBALS.ALLIANCE.BLUE){
             CB_CHAN_IDX = 2;
             CB_CHAN_MASK_THRESHOLD = 160;
-            
+        } else {
+            CB_CHAN_IDX = 1;
+            CB_CHAN_MASK_THRESHOLD = 185;
         }
+
         // We'll be updating this with new data below
         internalSampleList.clear();
         Size inputSize = input.size();
@@ -145,6 +147,8 @@ public class SampleOrientationAnalysisPipeline extends OpenCvPipeline {
         for (MatOfPoint contour : findContours(input)) {
             analyzeContour(contour, input);
         }
+        Imgproc.line(input, midSample, midIntake, RED, 2);
+
 
         clientSampleList = new ArrayList<>(internalSampleList);
         Imgproc.rectangle(input, intakeArea, new Scalar(0, 100, 0));
@@ -192,8 +196,7 @@ public class SampleOrientationAnalysisPipeline extends OpenCvPipeline {
 
         // Threshold the Cb channel to form a mask, then run some noise reduction
         Imgproc.threshold(cbMat, thresholdMat, CB_CHAN_MASK_THRESHOLD, 255, Imgproc.THRESH_BINARY);
-        morphMask(thresholdMat, morphedThreshold);
-
+        morphedThreshold = thresholdMat;
         // Ok, now actually look for the contours! We only look for external contours.
         Imgproc.findContours(morphedThreshold, contoursList, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
@@ -253,12 +256,12 @@ public class SampleOrientationAnalysisPipeline extends OpenCvPipeline {
 
         // Now that we've split the contour into those two regions, we analyze each
         // region independently.
-        ContourRegionAnalysis aboveMidlineMetrics = analyzeContourRegion(aboveMidline);
-        ContourRegionAnalysis belowMidlineMetrics = analyzeContourRegion(belowMidline);
+        // ContourRegionAnalysis aboveMidlineMetrics = analyzeContourRegion(aboveMidline);
+        // ContourRegionAnalysis belowMidlineMetrics = analyzeContourRegion(belowMidline);
 
-        if (aboveMidlineMetrics == null || belowMidlineMetrics == null) {
-            return; // Get out of dodge
-        }
+        // if (aboveMidlineMetrics == null || belowMidlineMetrics == null) {
+        //     return; // Get out of dodge
+        // }
 
         // We're going to draw line from the center of the bounding rect, to outside the bounding rect
         Point displOfOrientationLinePoint2 = computeDisplacementForSecondPointOfSampleOrientationLine(rotatedRectFitToContour, rotRectAngle);
@@ -271,12 +274,10 @@ public class SampleOrientationAnalysisPipeline extends OpenCvPipeline {
 
 
         double angle = (rotRectAngle);
-        if (angle > 90) {
-            angle = -(angle - 180);
-        }
-        angleOfSample = angle;
 
-        drawTagText(rotatedRectFitToContour, Integer.toString((int) Math.round(angle)) + " deg" + " " + intersect, input);
+        angleOfSample = 180 - angle;
+
+        drawTagText(rotatedRectFitToContour, Integer.toString((int) Math.round(angleOfSample)) + " deg" + " " + intersect, input);
 
         AnalyzedSample analyzedSample = new AnalyzedSample();
         analyzedSample.angle = rotRectAngle;
@@ -399,36 +400,33 @@ public class SampleOrientationAnalysisPipeline extends OpenCvPipeline {
 
             //TODO: reflect Blue vision code
 
-            if (!intersect && !isAPieceReady) {
+            if (intersect && !isAPieceReady) {
                 double xMidIntake = intakeArea.x + 0.5 * intakeArea.width;
                 double yMidIntake = intakeArea.y + 0.5 * intakeArea.height;
 
                 isChanged = false;
-                double xMidSample = points[1].x + points[3].x / 2;
-                double yMidSample = points[1].y + points[3].y / 2;
+                double xMidSample = (points[1].x + points[3].x) / 2;
+                double yMidSample = (points[1].y + points[3].y) / 2;
                 if(Math.sqrt(Math.pow((xMidSample-xMidIntake),2)+Math.pow(yMidSample-yMidIntake,2))   <   Math.sqrt(Math.pow(xChange,2)+Math.pow(yChange,2))) {
                     xChange = xMidSample - xMidIntake;
                     yChange = yMidSample - yMidIntake;
                     isChanged = true;
                 }
 
-                Point midSample = new Point(xMidSample, yMidSample);
-                Point midIntake = new Point(xMidIntake, yMidIntake);
-
-                Imgproc.line(drawOn, midSample, midIntake, RED, 1);
+                midSample = new Point(xMidSample, yMidSample);
+                midIntake = new Point(xMidIntake, yMidIntake);
             }else{
-                isChanged = true;
-                isAPieceReady = true;
+
                 xChange=0;
                 yChange=0;
             }
         }
     }
-        public double getRedYDifference() {
-            return yChange;
-        }
-        public double getRedXDifference() {
-            return xChange;
-        }
-        public double getAngle(){return angleOfSample;}
+    public double getRedYDifference() {
+        return yChange;
     }
+    public double getRedXDifference() {
+        return xChange;
+    }
+    public double getAngle(){return angleOfSample;}
+}
