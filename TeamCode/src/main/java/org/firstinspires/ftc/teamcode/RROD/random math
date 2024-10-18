@@ -1,0 +1,7 @@
+position of piece in space is a x,y,z position.
+we have rotating pivot, extending slides, and a rotating claw
+pivot and claw will be in degrees and slides will  be in inches
+x position: (robotPos.x + (cos(pivot)*extensionLen)*cos(robotPos.h)
+y position: (robotPos.y + (cos(pivot)*extensionLen)*sin(robotPos.h)
+z position: robotHeight + (sin(pivot) * entensionLen)
+heading: pivot + claw
