@@ -21,7 +21,7 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion 29
+    compileSdk 28
 
     signingConfigs {
         release {
@@ -57,6 +57,7 @@ android {
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
+        multiDexEnabled true
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
@@ -121,5 +122,7 @@ android {
 }
 
 repositories {
+    mavenCentral()
 }
+
 

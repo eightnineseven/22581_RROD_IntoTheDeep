@@ -90,7 +90,7 @@ public class Follower {
     private boolean holdingPosition;
     private boolean isBusy;
     private boolean reachedParametricPathEnd;
-    private boolean holdPositionAtEnd;
+    public static boolean holdPositionAtEnd;
     private boolean teleopDrive;
 
     private double maxPower = 1;
@@ -434,6 +434,7 @@ public class Follower {
      */
     public void followPath(PathChain pathChain) {
         followPath(pathChain, false);
+
     }
 
     /**
@@ -679,7 +680,7 @@ public class Follower {
      * @return returns if the Follower is busy.
      */
     public boolean isBusy() {
-        return isBusy;
+        return !isBusy;
     }
 
     /**

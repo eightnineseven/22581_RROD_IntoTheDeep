@@ -189,7 +189,7 @@ public class Pose {
      * @return returns if the input Pose is within the specified accuracy of this Pose
      */
     public boolean roughlyEquals(Pose pose, double accuracy) {
-        return MathFunctions.roughlyEquals(x, pose.getX(), accuracy) && MathFunctions.roughlyEquals(y, pose.getY(), accuracy) && MathFunctions.roughlyEquals(MathFunctions.getSmallestAngleDifference(heading, pose.getHeading()), 0, accuracy);
+        return MathFunctions.roughlyEquals(x, pose.getX(), accuracy) && MathFunctions.roughlyEquals(y, pose.getY(), accuracy);
     }
 
     /**
