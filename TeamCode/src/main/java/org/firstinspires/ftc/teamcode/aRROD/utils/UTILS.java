@@ -100,32 +100,46 @@ public class UTILS {
 
 
 
-    public static int REST = 0;
-    public static int READY_FOR_INTAKE = 1;
-    public static int INTAKE_PIECE = 2;
-    public static int OUTTAKE = 3;
-
-
     public static double HEADING_P=2;
     public static double HEADING_I=0;
     public static double HEADING_D=0;
-    public static double clawClosed = 0;
-    public static double clawOpen = 0.2;
-    public static double pivotScoring = 0;
-    public static double pivotHolding = 0.3;
-    public static double pivotSub = 0.15;
-    public static double armIntake =230;
-    public static double armRest = 0;
-    public static double armIntermediate = 530;
-    public static double armScore = 960;
-    public static double armSub = 2200;
-    public static double armSubIntermediate = 1900;
-    public static double ARM_P=0.0067;
-    public static double ARM_I=0;
-    public static double ARM_D=0.0004;
-    public static double ARM_F=0.1;
-    public static double ARM_TICKS_IN_DEGREES=28*5.24*5.24*5.24/360;
-    }
+   public static double extendo_P=0;
+   public static double extendo_I=0;
+   public static double extendo_D=0;
+   public static double extendo_F=0;
+   public static double lift_P=0;
+   public static double lift_I = 0;
+   public static double lift_D = 0;
+   public static double lift_F=0;
+   public static double lift_arm_specimen_score = 0.7;
+   public static double lift_arm_wall_intake = 0.2;
+   
+   
+   public static double claw_wide_open = 0.2;
+   public static double claw_slight_open = 0.1;
+   public static double claw_closed = 0;
+   public static double turret_swivel_0 = 0;
+   public static double turret_swivel_180 = 0;
+   public static double tape_swivel_0 = 0;
+   public static double tape_swivel_180=0;
+   public static long SERVO_WAIT_TIME = 150;
+    public static double LIFT_TICKS_IN_DEGREES= (double) 145 /360;
+    public static double EXTENDO_TICKS_IN_DEGREES = 0;
+    public static double lift_pos_specimen=0;
+    public static double lift_pos_rest = 0;
+    //
+    // intake arm positions
+    public static double lift_arm_bucket_score = 0;
+    public static double lift_arm_transfer = 0;
+    public static double extendo_arm_pickup = 0;
+    public static double lift_pos_bucket = 0;
+    public static double extendo_out = 0;
+    public static double turret_transfer = 0;
+    public static double turret_intake = 0;
+    public static double nanoTape_transfer = 0;
+    public static double nanoTape_intake = 0;
+}
+
 
 
 
