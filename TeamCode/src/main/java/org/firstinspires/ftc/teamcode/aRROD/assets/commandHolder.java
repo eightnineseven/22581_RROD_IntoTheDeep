@@ -7,11 +7,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.aRROD.commands.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 
 public class commandHolder {
-    public SequentialCommandGroup armIntake(Mechanisms mechs, Follower follower){
+    public SequentialCommandGroup lift_arm_specimen_intake(Mechanisms mechs, Follower follower){
         SequentialCommandGroup actions = new SequentialCommandGroup(
                new InstantCommand(mechs::armIntake),
                 new InstantCommand(mechs::clawOpen),
@@ -25,7 +24,7 @@ public class commandHolder {
     }
 
 
-    public SequentialCommandGroup liftScore(Mechanisms mechs, Follower follower){
+    public SequentialCommandGroup lift_specimen_score(Mechanisms mechs, Follower follower){
         SequentialCommandGroup actions = new SequentialCommandGroup(
                 new InstantCommand(mechs::liftUp),
                 new WaitUntilCommand(mechs::liftCloseEnough),
