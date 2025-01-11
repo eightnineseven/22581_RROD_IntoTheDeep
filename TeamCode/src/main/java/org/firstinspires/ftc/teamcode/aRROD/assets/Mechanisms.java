@@ -71,7 +71,7 @@ public class Mechanisms {
 
         int armPos = extendo_motor.getCurrentPosition();
         double pid = extendo_controller.calculate(armPos, lift_TARGET);
-        double ff = Math.cos(Math.toRadians(extendo_TARGET / EXTENDO_TICKS_IN_DEGREES)) * lift_F;
+        double ff = Math.cos(Math.toRadians(lift_TARGET / LIFT_TICKS_IN_DEGREES)) * lift_F;
         double power = pid + ff;
 
 
