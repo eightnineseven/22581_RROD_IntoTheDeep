@@ -4,16 +4,18 @@ import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.*;
 
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Mechanisms {
-    public static DcMotor extendo_motor;
+    public static DcMotorEx extendo_motor;
     public static ServoImplEx armL;
     public static ServoImplEx armR;
     public static ServoImplEx clawL;
@@ -28,8 +30,8 @@ public class Mechanisms {
 
 
 
-    public static double extendo_TARGET = 0;
-    public static double lift_TARGET=0;
+
+
     public static double oldTarget = 0;
 
     public static PIDController extendo_controller;
@@ -39,15 +41,18 @@ public class Mechanisms {
     public static Timer timer;
 
     public Mechanisms(final HardwareMap hardwareMap){
-        extendo_motor = hardwareMap.dcMotor.get("motor_ch_3");
-        armL = hardwareMap.get(ServoImplEx.class, "servo_ch_1)");
+        liftL = hardwareMap.dcMotor.get("motor_eh_1");
+        liftR = hardwareMap.dcMotor.get("motor_ch_1");
+        liftR.setDirection(DcMotorSimple.Direction.REVERSE);
+        extendo_motor = hardwareMap.get(DcMotorEx.class,"motor_ch_3");
+        armL = hardwareMap.get(ServoImplEx.class, "servo_ch_1");
         armL.setPwmRange(new PwmControl.PwmRange(500, 2500));
         //armR = hardwareMap.get(Servo.class, "servo_ch_1");
         clawL = hardwareMap.get(ServoImplEx.class, "servo_ch_0");
         clawL.setPwmRange(new PwmControl.PwmRange(500, 2500));
         //clawR = hardwareMap.get(ServoImplEx.class, "location");
-        armR.setDirection(Servo.Direction.REVERSE);
-        extendo_motor.setDirection(DcMotorSimple.Direction.REVERSE);
+       //armR.setDirection(Servo.Direction.REVERSE);
+
         extendo_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extendo_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turret = hardwareMap.get(ServoImplEx.class, "servo_eh_0");
@@ -93,21 +98,21 @@ public class Mechanisms {
     public void armScore(){
 
         armL.setPosition(lift_arm_specimen_score);
-        armR.setPosition(lift_arm_specimen_score);
+        //armR.setPosition(lift_arm_specimen_score);
     }
 
     public void armIntake(){
         armL.setPosition(lift_arm_wall_intake);
-        armR.setPosition(lift_arm_wall_intake);
+        //armR.setPosition(lift_arm_wall_intake);
     }
 
     public void clawOpen(){
         clawL.setPosition(claw_wide_open);
-        clawR.setPosition(claw_wide_open);
+        //clawR.setPosition(claw_wide_open);
     }
     public void clawClosed(){
         clawL.setPosition(claw_closed);
-        clawR.setPosition(claw_closed);
+        //clawR.setPosition(claw_closed);
     }
     public void liftUp(){
         //sets the target value in the update method that i showed earlier
@@ -131,8 +136,71 @@ public class Mechanisms {
         turret.setPosition(turret_intake);
         extendo_arm.setPosition(extendo_arm_pickup);
     }
+    public void extendo_arm_camera_pos(){
+        extendo_arm.setPosition(extendo_arm_camera_pos);
+    }
+    public void extendo_arm_prep_pos(){
+        extendo_arm.setPosition(extendo_arm_prep_pos);
+    }
+    public void tape_swivel(double value){
+        swivel.setPosition(swivel.getPosition()+0.005*value);
+    }
+
+    public void turret_swivel(double value){
+        turret.setPosition(turret.getPosition()+0.005*value);
+    }
+    public void extendo_out(double value){
+        extendo_TARGET += value*2;
+        if(extendo_TARGET > 400){
+            extendo_TARGET = 400;
+        }
+    }
+    public void extendo_in_manual(double value){
+        extendo_TARGET-=value*2;
+        if(extendo_TARGET < 0){
+            extendo_TARGET = 0;
+        }
+    }
+    public void extendo_arm_intake(){
+        extendo_arm.setPosition(extendo_arm_pickup);
+    }
+    public void extendo_intake_transfer(){
+        extendo_arm.setPosition(extendo_arm_transfer_pos);
+        swivel.setPosition(nanoTape_transfer);
+        turret.setPosition(turret_transfer);
+    }
+    public double getExtendoVoltage(){
+        return extendo_motor.getCurrent(CurrentUnit.AMPS);
+    }
+    public double getExtendoTarget(){
+        return extendo_motor.getCurrentPosition();
+    }
+    public void lift_specimen(){
+        lift_TARGET = lift_pos_specimen;
+    }
+    public void arm_transfer(){
+        armL.setPosition(lift_arm_transfer);
+    }
+    public double getLiftPos(){
+        return liftL.getCurrentPosition();
+    }
+    public void prepTransfer(){
+        extendo_arm.setPosition(extendo_arm_camera_pos);
+        lift_TARGET = lift_transfer_pos;
+        clawOpen();
+        armL.setPosition(lift_arm_transfer);
+        swivel.setPosition(0.5);
+        turret.setPosition(0.55);
+    }
+    public void resetMotors(){
+        liftL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extendo_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        extendo_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
 
     }
+
 
 
