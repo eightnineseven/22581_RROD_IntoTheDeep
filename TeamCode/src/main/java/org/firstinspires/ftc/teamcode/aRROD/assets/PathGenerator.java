@@ -27,55 +27,47 @@ public class PathGenerator {
                     .addPath(
                             // Line 1
                             new BezierLine(
-                                    new Point(8.493, 65.244, Point.CARTESIAN),
-                                    new Point(40.150, 64.472, Point.CARTESIAN)
+                                    new Point(new Pose(7.338, 65.859, Math.toRadians(0))),
+                                    new Point(new Pose(40, 65.859, Math.toRadians(0)))))
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
         } else if (pathNum == 2) {
             //break for subsystem
             builder
-                    .addPath(
-                            // Line 2
-                            new BezierCurve(
-                                    new Point(40.150, 64.472, Point.CARTESIAN),
-                                    new Point(0.965, 36.869, Point.CARTESIAN),
-                                    new Point(71.807, 33.587, Point.CARTESIAN),
-                                    new Point(101.534, 18.145, Point.CARTESIAN),
-                                    new Point(32.622, 24.901, Point.CARTESIAN),
-                                    new Point(20.461, 22.391, Point.CARTESIAN)
-                            )
-                    )
-                    .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(
-                            // Line 3
-                            new BezierCurve(
-                                    new Point(20.461, 22.391, Point.CARTESIAN),
-                                    new Point(65.630, 28.954, Point.CARTESIAN),
-                                    new Point(73.544, 8.493, Point.CARTESIAN),
-                                    new Point(68.912, 16.214, Point.CARTESIAN),
-                                    new Point(20.461, 12.161, Point.CARTESIAN)
-                            )
-                    )
-                    .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(
-                            // Line 4
-                            new BezierCurve(
-                                    new Point(20.461, 12.161, Point.CARTESIAN),
-                                    new Point(84.933, 18.531, Point.CARTESIAN),
-                                    new Point(69.298, 4.054, Point.CARTESIAN),
-                                    new Point(21.812, 7.914, Point.CARTESIAN)
-                            )
-                    )
-                    .setConstantHeadingInterpolation(Math.toRadians(0))
-                    .addPath(
-                            // Line 5
-                            new BezierLine(
-                                    new Point(21.812, 7.914, Point.CARTESIAN),
-                                    new Point(8.686, 24.129, Point.CARTESIAN)
-                            )
-                    )
-                    .setConstantHeadingInterpolation(Math.toRadians(0));
+                    .addPath(new BezierCurve(
+                        new Point(new Pose(40.000, 65.859, Math.toRadians(0))),
+                        new Point(new Pose(34.000, 67.000, Math.toRadians(0))),
+                        new Point(new Pose(0.000, 48.000, Math.toRadians(0))),
+                        new Point(new Pose(50, 30.000, Math.toRadians(0)))))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierCurve(
+                        new Point(new Pose(50, 30.000, Math.toRadians(0))),
+                        new Point(new Pose(65.000, 20.000, Math.toRadians(0))),
+                        new Point(new Pose(22, 20.000, Math.toRadians(0)))))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierCurve(
+                        new Point(new Pose(22, 20.000, Math.toRadians(0))),
+                        new Point(new Pose(65.000, 28, Math.toRadians(0))),
+                        new Point(new Pose(50, 13.5, Math.toRadians(0)))))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierLine(
+                        new Point(new Pose(50, 13.5, Math.toRadians(0))),
+                        new Point(new Pose(22, 13.5, Math.toRadians(0)))))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(new BezierCurve(
+                        new Point(new Pose(22, 13.5, Math.toRadians(0))),
+                        new Point(new Pose(65.000, 16.250, Math.toRadians(0))),
+                        new Point(new Pose(50, 7.9, Math.toRadians(0)))))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .addPath(
+                        // Line 1
+                        new BezierLine(
+                                new Point(50.000, 7.9, Point.CARTESIAN),
+                                new Point(19, 7.9, Point.CARTESIAN)
+                        )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(0))
         }
         //break for subsysems
         else if (pathNum == 3) {
