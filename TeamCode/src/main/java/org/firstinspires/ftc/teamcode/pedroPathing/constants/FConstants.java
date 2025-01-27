@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.pedroPathing.constants;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.localization.Localizers;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.util.CustomFilteredPIDFCoefficients;
