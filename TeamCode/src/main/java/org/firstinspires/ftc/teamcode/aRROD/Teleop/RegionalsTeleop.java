@@ -5,7 +5,6 @@ package org.firstinspires.ftc.teamcode.aRROD.Teleop;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.extendo_D;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.extendo_I;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.extendo_P;
-import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.extendo_TARGET;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -19,7 +18,7 @@ import org.firstinspires.ftc.teamcode.aRROD.assets.Mechanisms;
 
 @TeleOp
 @Config
-public class liftPIDTuner extends LinearOpMode {
+public class RegionalsTeleop extends LinearOpMode {
 
 
     Gamepad currentGamepad = new Gamepad();

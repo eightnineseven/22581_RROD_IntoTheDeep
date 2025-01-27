@@ -15,8 +15,7 @@ import org.firstinspires.ftc.teamcode.aRROD.assets.PathGenerator;
 import org.firstinspires.ftc.teamcode.aRROD.assets.commandHolder;
 
 import org.firstinspires.ftc.teamcode.aRROD.commands.FollowPathCommand;
-import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
+import com.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.aRROD.utils.FixedSequentialCommandGroup;
 
 @Config

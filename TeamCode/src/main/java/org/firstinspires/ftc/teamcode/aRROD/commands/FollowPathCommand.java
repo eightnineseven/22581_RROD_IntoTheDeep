@@ -1,25 +1,27 @@
 package org.firstinspires.ftc.teamcode.aRROD.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.pedropathing.pathgen.PathChain;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.pathgen.PathChain;
+import com.pedropathing.pathgen.Path;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 
 public class FollowPathCommand extends CommandBase {
 
-    private final Follower follower;
-    private final PathChain path;
+    public Follower follower;
+    private  PathChain path = new PathChain();
     private boolean holdEnd = true;
 
     public FollowPathCommand(Follower follower, PathChain path) {
+
         this.follower = follower;
         this.path = path;
     }
 
-    public FollowPathCommand(Follower follower, Path path) {
-        this(follower, new PathChain(path));
-    }
+
 
     /**
      * Decides whether or not to make the robot maintain its position once the path ends.

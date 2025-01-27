@@ -7,7 +7,8 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+import com.pedropathing.follower.Follower;
+
 
 public class commandHolder {
     public SequentialCommandGroup lift_arm_specimen_intake(Mechanisms mechs, Follower follower){

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.aRROD.assets;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.*;
 
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,7 +13,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
 public class Mechanisms {
     public static DcMotorEx extendo_motor;
