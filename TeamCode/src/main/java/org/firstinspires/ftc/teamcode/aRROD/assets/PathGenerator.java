@@ -8,6 +8,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 import com.pedropathing.*;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.PathBuilder;
@@ -30,7 +31,7 @@ public class PathGenerator {
                             // Line 1
                             new BezierLine(
                                     new Point(new Pose(7.338, 65.859, Math.toRadians(0))),
-                                    new Point(new Pose(40, 65.859, Math.toRadians(0)))))
+                                    new Point(new Pose(40, 65.859, Math.toRadians(0)))
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -69,7 +70,7 @@ public class PathGenerator {
                                 new Point(19, 7.9, Point.CARTESIAN)
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(0));
         }
         //break for subsysems
         else if (pathNum == 3) {
