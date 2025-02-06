@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.aRROD.utils;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.localization.Pose;
 
 @Config
 public class UTILS {
@@ -31,12 +32,12 @@ public class UTILS {
    public static double extendo_I=0.0001;
    public static double extendo_D=0.0005;
    public static double extendo_F=0.01;
-   public static double lift_P=0.015;
+   public static double lift_P=0.016;
    public static double lift_I = 0.3;
    public static double lift_D = 0.0005;
    public static double lift_F=0.12;
-   public static double lift_arm_specimen_score =  0.08;
-   public static double lift_arm_wall_intake = 0.82;
+   public static double lift_arm_specimen_score =  0.37;
+   public static double lift_arm_wall_intake = 0.98;
    
    
    public static double claw_wide_open = 0.2;
@@ -54,7 +55,7 @@ public class UTILS {
     //
     // intake arm positions
     public static double lift_arm_bucket_score = 0.6;
-    public static double lift_arm_transfer = 0;
+    public static double lift_arm_transfer = 0.06;
     public static double extendo_arm_pickup = 0;
     public static double lift_pos_bucket = 0;
     public static double extendo_out = 0;
@@ -67,11 +68,13 @@ public class UTILS {
     public static double PIXELS_PER_INCH = 96;
     public static double extendo_arm_camera_pos = 0.6;
     public static double extendo_arm_prep_pos  = 0.2;
+    public static double extnedo_arm_retry_prep = 0.15;
     public static double extendo_TARGET = 0;
     public static double lift_TARGET = 0;
-    public static double extendo_arm_transfer_pos=0.65;
+    public static double extendo_arm_transfer_pos=0.92;
     public static double lift_transfer_pos = 100;
     public static double lift_arm_transfer_pos = 0;
+    public static Pose autoToTeleop = new Pose();
 }
 
 

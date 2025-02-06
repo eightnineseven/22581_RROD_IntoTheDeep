@@ -4,21 +4,16 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.pedropathing.pathgen.PathChain;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.pathgen.PathChain;
-import com.pedropathing.pathgen.Path;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-
 public class FollowPathCommand extends CommandBase {
 
     public Follower follower;
-    private  PathChain path = new PathChain();
+    private  PathChain pathChain;
     private boolean holdEnd = true;
 
-    public FollowPathCommand(Follower follower, PathChain path) {
+    public FollowPathCommand(Follower follower, PathChain pathChain) {
 
         this.follower = follower;
-        this.path = path;
+        this.pathChain = pathChain;
     }
 
 
@@ -36,7 +31,7 @@ public class FollowPathCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        follower.followPath(path, holdEnd);
+        follower.followPath(pathChain,1,true);
     }
 
     @Override

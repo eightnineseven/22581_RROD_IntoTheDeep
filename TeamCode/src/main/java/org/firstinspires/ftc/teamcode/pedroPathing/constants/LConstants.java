@@ -5,12 +5,11 @@ import com.pedropathing.localization.*;
 import com.pedropathing.localization.constants.*;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-@Config
 public class LConstants {
     static {
-        PinpointConstants.forwardY = 98;
-        PinpointConstants.strafeX = -100.38;
-        PinpointConstants.distanceUnit = DistanceUnit.MM;
+        PinpointConstants.forwardY = 4;
+        PinpointConstants.strafeX = 4;
+        PinpointConstants.distanceUnit = DistanceUnit.INCH;
         PinpointConstants.hardwareMapName = "odo";
         PinpointConstants.useYawScalar = false;
         PinpointConstants.yawScalar = 1.0;

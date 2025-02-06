@@ -3,24 +3,29 @@ package org.firstinspires.ftc.teamcode.aRROD.Auto;
 
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.*;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.pedropathing.localization.Pose;
+import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
+import org.firstinspires.ftc.teamcode.aRROD.assets.FiveSpecPaths;
 import org.firstinspires.ftc.teamcode.aRROD.assets.Mechanisms;
-import org.firstinspires.ftc.teamcode.aRROD.assets.PathGenerator;
+import org.firstinspires.ftc.teamcode.aRROD.assets.FourSpecPaths;
 import org.firstinspires.ftc.teamcode.aRROD.assets.commandHolder;
 
 import org.firstinspires.ftc.teamcode.aRROD.commands.FollowPathCommand;
 import com.pedropathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.aRROD.utils.FixedSequentialCommandGroup;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
+import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
-@Config
 @Autonomous
-public class SpecimenAuto extends CommandOpMode {
+public class FiveSpecAuto extends CommandOpMode {
 
 
 
@@ -29,13 +34,14 @@ public class SpecimenAuto extends CommandOpMode {
     public void initialize() {
         TEAM_COLOR = teamColor.RED;
 
-        Mechanisms mechs = new Mechanisms(hardwareMap);
 
+        Constants.setConstants(FConstants.class, LConstants.class);
         Follower follower = new Follower(hardwareMap);
+        Mechanisms mechs = new Mechanisms(hardwareMap, follower);
 
-        //follower.setStartingPose(new Pose(startX, startY, 180));
+        follower.setStartingPose(new Pose(7.000, 64.950, 0));
 
-        PathGenerator paths = new PathGenerator();
+        FiveSpecPaths paths = new FiveSpecPaths();
         commandHolder actions = new commandHolder();
 
 
@@ -43,42 +49,63 @@ public class SpecimenAuto extends CommandOpMode {
                 //updates our odo every cycle
                 new RunCommand(follower::update),
                 //updates the double extendo to keep it closed
-                new RunCommand(mechs::extendoUpdate),
+                new RunCommand(mechs::keepExtendoIn),
                 //updates the lift motors so they follow our actions
                 new RunCommand(mechs::liftUpdate),
                 new FixedSequentialCommandGroup(
                         //initializing movements
-                        actions.init(mechs, follower),
+
                         //waiting to hit play on the driver station
                         new WaitUntilCommand(this::opModeIsActive),
                         //follows first defined path
                         new FollowPathCommand(follower, paths.getPath(1,follower)),
                         //stops this flow until the robot is stopped in place
-                        new WaitUntilCommand(follower::isBusy),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(200),
+
                         //the lift system fires up and down
-                        actions.lift_specimen_score(mechs,follower),
+                        // actions.lift_specimen_score(mechs),
+
+
+
                         new FollowPathCommand(follower, paths.getPath(2,follower)),
-                        actions.lift_arm_specimen_intake(mechs, follower),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(600),
+
+
+
+
                         new FollowPathCommand(follower, paths.getPath(3,follower)),
-                        new WaitUntilCommand(follower::isBusy),
-                        actions.lift_specimen_score(mechs,follower),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(200),
+
+
                         new FollowPathCommand(follower, paths.getPath(4,follower)),
-                        actions.lift_arm_specimen_intake(mechs, follower),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(600),
+
+
+
                         new FollowPathCommand(follower, paths.getPath(5,follower)),
-                        new WaitUntilCommand(follower::isBusy),
-                        actions.lift_specimen_score(mechs,follower),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(200),
+
+
+
                         new FollowPathCommand(follower, paths.getPath(6,follower)),
-                        actions.lift_arm_specimen_intake(mechs, follower),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(600),
+
+
+
                         new FollowPathCommand(follower, paths.getPath(7,follower)),
-                        new WaitUntilCommand(follower::isBusy),
-                        actions.lift_specimen_score(mechs,follower),
-                        new FollowPathCommand(follower, paths.getPath(8,follower)),
-                        actions.lift_arm_specimen_intake(mechs, follower),
-                        new FollowPathCommand(follower, paths.getPath(9,follower)),
-                        new WaitUntilCommand(follower::isBusy),
-                        actions.lift_specimen_score(mechs,follower),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(200),
+
+
                         new FollowPathCommand(follower, paths.getPath(10,follower)),
-                        new WaitUntilCommand(follower::isBusy)
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new InstantCommand(()->mechs.autoPosEnd(follower.getPose()))
 
 
 
@@ -100,10 +127,19 @@ public class SpecimenAuto extends CommandOpMode {
 
 
 
-                        )
 
 
 
+
+
+
+
+
+
+
+
+
+                )
 
         );
     }

@@ -11,13 +11,20 @@ import com.pedropathing.follower.Follower;
 
 
 public class commandHolder {
-    public SequentialCommandGroup lift_arm_specimen_intake(Mechanisms mechs, Follower follower){
+    public SequentialCommandGroup pre_wall_intake(Mechanisms mechs){
         SequentialCommandGroup actions = new SequentialCommandGroup(
                new InstantCommand(mechs::armIntake),
-                new InstantCommand(mechs::clawOpen),
-                new WaitUntilCommand(follower::isBusy),
+                new InstantCommand(mechs::clawOpen)
+
+
+
+        );
+        return  actions;
+    }
+    public SequentialCommandGroup actual_wall_intake(Mechanisms mechs){
+        SequentialCommandGroup actions = new SequentialCommandGroup(
                 new InstantCommand(mechs::clawClosed),
-                new WaitCommand(SERVO_WAIT_TIME),
+                new WaitCommand(200),
                 new InstantCommand(mechs::armScore)
 
         );
@@ -25,21 +32,28 @@ public class commandHolder {
     }
 
 
-    public SequentialCommandGroup lift_specimen_score(Mechanisms mechs, Follower follower){
+    public SequentialCommandGroup lift_specimen_score(Mechanisms mechs){
         SequentialCommandGroup actions = new SequentialCommandGroup(
                 new InstantCommand(mechs::liftUp),
                 new WaitUntilCommand(mechs::liftCloseEnough),
+                new WaitCommand(300),
+                new InstantCommand(mechs::clawOpen),
                 new InstantCommand(mechs::liftDown)
         );
+
         return actions;
     }
 
 
 
-    public SequentialCommandGroup init(Mechanisms mechs, Follower follower){
+
+
+
+
+
+    public SequentialCommandGroup init(Mechanisms mechs){
         SequentialCommandGroup actions = new SequentialCommandGroup(
                 new InstantCommand(mechs::clawClosed),
-                new WaitCommand(300),
                 new InstantCommand(mechs::armScore),
                 new InstantCommand(mechs::extendoClose)
         );

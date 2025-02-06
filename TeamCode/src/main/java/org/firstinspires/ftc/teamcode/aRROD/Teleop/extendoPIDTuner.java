@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode.aRROD.Teleop;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.lift_TARGET;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -15,7 +16,8 @@ import org.firstinspires.ftc.teamcode.aRROD.assets.Mechanisms;
 public class extendoPIDTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        Mechanisms mechs = new Mechanisms(hardwareMap);
+        Follower follower = new Follower(hardwareMap);
+        Mechanisms mechs = new Mechanisms(hardwareMap, follower);
         waitForStart();
         while(opModeIsActive() && !isStopRequested()){
             mechs.liftUpdate();
