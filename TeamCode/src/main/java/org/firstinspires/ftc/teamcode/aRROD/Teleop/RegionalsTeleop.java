@@ -21,9 +21,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.aRROD.assets.Mechanisms;
+import org.firstinspires.ftc.teamcode.aRROD.assets.SampleOrientationAnalysisPipeline;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 @TeleOp
 @Config
@@ -151,7 +154,7 @@ public class RegionalsTeleop extends LinearOpMode {
                 }
                 else if(lift_toggle ==2) {
                     mechs.armScore();
-                    mechs.extendo_arm_prep_pos();
+
                 } else if(lift_toggle==3){
                         mechs.liftIntermediate();
                 } else if(lift_toggle ==4){
@@ -255,13 +258,6 @@ public class RegionalsTeleop extends LinearOpMode {
             }
 
             //manual control of extendo
-            if (gamepad2.left_trigger > 0.1) {
-                mechs.extendo_out(gamepad2.left_trigger*1.6);
-            }
-            if (gamepad2.right_trigger > 0.1) {
-                mechs.extendo_in_manual(gamepad2.right_trigger*1.6);
-            }
-
 
 
 

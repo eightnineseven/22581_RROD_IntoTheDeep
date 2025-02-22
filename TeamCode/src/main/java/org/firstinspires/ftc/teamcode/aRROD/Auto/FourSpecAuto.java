@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.aRROD.assets.Mechanisms;
 import org.firstinspires.ftc.teamcode.aRROD.assets.FourSpecPaths;
-import org.firstinspires.ftc.teamcode.aRROD.assets.commandHolder;
+import org.firstinspires.ftc.teamcode.aRROD.commands.commandHolder;
 
 import org.firstinspires.ftc.teamcode.aRROD.commands.FollowPathCommand;
 import com.pedropathing.follower.Follower;
@@ -32,6 +32,7 @@ public class FourSpecAuto extends CommandOpMode {
 
     public void initialize() {
         TEAM_COLOR = teamColor.RED;
+        double POWER = 0.7;
 
 
         Constants.setConstants(FConstants.class, LConstants.class);
@@ -53,62 +54,62 @@ public class FourSpecAuto extends CommandOpMode {
                 new RunCommand(mechs::liftUpdate),
                 new FixedSequentialCommandGroup(
                         //initializing movements
-                        actions.init(mechs),
+                       // actions.init(mechs),
                         //waiting to hit play on the driver station
                         new WaitUntilCommand(this::opModeIsActive),
                         //follows first defined path
-                        new FollowPathCommand(follower, paths.getPath(1,follower)),
+                        new FollowPathCommand(follower, paths.getPath(1,follower),POWER),
                         //stops this flow until the robot is stopped in place
                         new WaitUntilCommand(() ->!follower.isBusy()),
                         new WaitCommand(200),
-                        actions.lift_specimen_score(mechs),
-                        actions.pre_wall_intake(mechs),
+                        //actions.lift_specimen_score(mechs),
+                        //actions.pre_wall_intake(mechs),
                         //the lift system fires up and down
                        // actions.lift_specimen_score(mechs),
 
 
 
-                        new FollowPathCommand(follower, paths.getPath(2,follower)),
+                        new FollowPathCommand(follower, paths.getPath(2,follower),POWER),
                         new WaitUntilCommand(() ->!follower.isBusy()),
-                        new FollowPathCommand(follower, paths.getPath(11,follower)),
-                        new WaitUntilCommand(() ->!follower.isBusy()),
-                        new WaitCommand(800),
-                        actions.actual_wall_intake(mechs),
-
-
-
-                        new FollowPathCommand(follower, paths.getPath(3,follower)),
-                        new WaitUntilCommand(() ->!follower.isBusy()),
-                        new WaitCommand(200),
-                        actions.lift_specimen_score(mechs),
-                        actions.pre_wall_intake(mechs),
-
-                        new FollowPathCommand(follower, paths.getPath(4,follower)),
+                        new FollowPathCommand(follower, paths.getPath(11,follower),POWER),
                         new WaitUntilCommand(() ->!follower.isBusy()),
                         new WaitCommand(800),
-                        actions.actual_wall_intake(mechs),
+                        //actions.actual_wall_intake(mechs),
 
 
-                        new FollowPathCommand(follower, paths.getPath(5,follower)),
+
+                        new FollowPathCommand(follower, paths.getPath(3,follower),POWER),
                         new WaitUntilCommand(() ->!follower.isBusy()),
                         new WaitCommand(200),
-                        actions.lift_specimen_score(mechs),
-                        actions.pre_wall_intake(mechs),
+                       // actions.lift_specimen_score(mechs),
+                       // actions.pre_wall_intake(mechs),
 
-
-                        new FollowPathCommand(follower, paths.getPath(6,follower)),
+                        new FollowPathCommand(follower, paths.getPath(4,follower),POWER),
                         new WaitUntilCommand(() ->!follower.isBusy()),
                         new WaitCommand(800),
-                        actions.actual_wall_intake(mechs),
+                        //actions.actual_wall_intake(mechs),
 
 
-                        new FollowPathCommand(follower, paths.getPath(7,follower)),
+                        new FollowPathCommand(follower, paths.getPath(5,follower),POWER),
                         new WaitUntilCommand(() ->!follower.isBusy()),
                         new WaitCommand(200),
-                        actions.lift_specimen_score(mechs),
-                        actions.pre_wall_intake(mechs),
+                       // actions.lift_specimen_score(mechs),
+                       // actions.pre_wall_intake(mechs),
 
-                new FollowPathCommand(follower, paths.getPath(10,follower)),
+
+                        new FollowPathCommand(follower, paths.getPath(6,follower),POWER),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(800),
+                        //actions.actual_wall_intake(mechs),
+
+
+                        new FollowPathCommand(follower, paths.getPath(7,follower),POWER),
+                        new WaitUntilCommand(() ->!follower.isBusy()),
+                        new WaitCommand(200),
+                      //  actions.lift_specimen_score(mechs),
+                      //  actions.pre_wall_intake(mechs),
+
+                new FollowPathCommand(follower, paths.getPath(10,follower),POWER),
                 new WaitUntilCommand(() ->!follower.isBusy()),
                         new InstantCommand(()->mechs.autoPosEnd(follower.getPose()))
 

@@ -8,12 +8,14 @@ public class FollowPathCommand extends CommandBase {
 
     public Follower follower;
     private  PathChain pathChain;
+    public double power;
     private boolean holdEnd = true;
 
-    public FollowPathCommand(Follower follower, PathChain pathChain) {
+    public FollowPathCommand(Follower follower, PathChain pathChain, double power) {
 
         this.follower = follower;
         this.pathChain = pathChain;
+        this.power = power;
     }
 
 
@@ -31,7 +33,7 @@ public class FollowPathCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        follower.followPath(pathChain,1,true);
+        follower.followPath(pathChain,power,true);
     }
 
     @Override

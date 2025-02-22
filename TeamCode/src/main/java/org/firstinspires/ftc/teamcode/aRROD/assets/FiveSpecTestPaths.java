@@ -12,7 +12,7 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 
 @Config
-public class FiveSpecPaths {
+public class FiveSpecTestPaths {
     private PathChain preloadTraj, firstSampTraj, firstSampPushTraj, placeSecondSpecTraj, secondSampTraj, placeThirdSpecTraj, thirdSampTraj, placeFourceSpecTraj, getFifthSpecTraj, placeFifthSpecTraj, parkTraj;
 
     private PinpointLocalizer follower;
@@ -28,7 +28,7 @@ public class FiveSpecPaths {
                             //preload
                             new BezierLine(
                                     new Point(7.000, 64.950, Point.CARTESIAN),
-                                    new Point(39.500, 80.000, Point.CARTESIAN)
+                                    new Point(41.000, 80.000, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -39,11 +39,11 @@ public class FiveSpecPaths {
                     .addPath(
                             // push 1
                             new BezierCurve(
-                                    new Point(39.500, 80.000, Point.CARTESIAN),
+                                    new Point(41.000, 80.000, Point.CARTESIAN),
                                     new Point(21.426, 20.847, Point.CARTESIAN),
                                     new Point(41.308, 37.641, Point.CARTESIAN),
                                     new Point(76.000, 48.000, Point.CARTESIAN),
-                                    new Point(81.000, 16.000, Point.CARTESIAN),
+                                    new Point(75.000, 16.000, Point.CARTESIAN),
                                     new Point(45.000, 24.000, Point.CARTESIAN),
                                     new Point(25.000, 24.000, Point.CARTESIAN)
                             )
@@ -53,8 +53,8 @@ public class FiveSpecPaths {
                             // push 2
                             new BezierCurve(
                                     new Point(25.000, 24.000, Point.CARTESIAN),
-                                    new Point(73.000, 26.000, Point.CARTESIAN),
-                                    new Point(45.000, 10.000, Point.CARTESIAN),
+                                    new Point(75.000, 30.000, Point.CARTESIAN),
+                                    new Point(47.000, 10.000, Point.CARTESIAN),
                                     new Point(27.000, 17.000, Point.CARTESIAN),
                                     new Point(25.000, 16.000, Point.CARTESIAN)
                             )
@@ -64,12 +64,12 @@ public class FiveSpecPaths {
                             // push 3/pickup 1st
                             new BezierCurve(
                                     new Point(25.000, 16.000, Point.CARTESIAN),
-                                    new Point(72.000, 17.000, Point.CARTESIAN),
-                                    new Point(82.000, 5.000, Point.CARTESIAN),
-                                    new Point(43.000, 11.000, Point.CARTESIAN),
-                                    new Point(16.000, 5.000, Point.CARTESIAN),
-                                    new Point(17.000, 4.000, Point.CARTESIAN),
-                                    new Point(5.900, 24.000, Point.CARTESIAN)
+                                    new Point(68.000, 17.000, Point.CARTESIAN),
+                                    new Point(79.000, 9.000, Point.CARTESIAN),
+                                    new Point(42.000, 9.000, Point.CARTESIAN),
+                                    new Point(11.000, 9.000, Point.CARTESIAN),
+                                    new Point(13.000, 9, Point.CARTESIAN),
+                                    new Point(6.900, 32.000, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -85,9 +85,9 @@ public class FiveSpecPaths {
                             // Line 8
                             //place 2nd
                             new BezierCurve(
-                                    new Point(5.900, 24.000, Point.CARTESIAN),
+                                    new Point(7.400, 32.000, Point.CARTESIAN),
                                     new Point(15.000, 74.000, Point.CARTESIAN),
-                                    new Point(39.500, 77.500, Point.CARTESIAN)
+                                    new Point(41.000, 77.500, Point.CARTESIAN)
                             )
 
 
@@ -99,10 +99,10 @@ public class FiveSpecPaths {
                     .addPath(
                             // Line 7
                             new BezierCurve(
-                                    new Point(39.500, 77.500, Point.CARTESIAN),
+                                    new Point(41.000, 77.500, Point.CARTESIAN),
                                     new Point(17.000, 73.000, Point.CARTESIAN),
                                     new Point(35.000, 27.000, Point.CARTESIAN),
-                                    new Point(6.500, 24.000, Point.CARTESIAN)
+                                    new Point(7.400, 32.000, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -111,9 +111,9 @@ public class FiveSpecPaths {
                     .addPath(
                             //place third
                             new BezierCurve(
-                                    new Point(6.500, 24.000, Point.CARTESIAN),
+                                    new Point(7.400, 32.000, Point.CARTESIAN),
                                     new Point(15.000, 74.000, Point.CARTESIAN),
-                                    new Point(39.500, 75.000, Point.CARTESIAN)
+                                    new Point(41.000, 75.000, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -122,10 +122,10 @@ public class FiveSpecPaths {
                     .addPath(
                             //pickup 3rd
                             new BezierCurve(
-                                    new Point(39.500, 75.000, Point.CARTESIAN),
+                                    new Point(41.000, 75.000, Point.CARTESIAN),
                                     new Point(17.000, 73.000, Point.CARTESIAN),
                                     new Point(35.000, 27.000, Point.CARTESIAN),
-                                    new Point(6.500, 24.000, Point.CARTESIAN)
+                                    new Point(7.400, 32.000, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -134,9 +134,9 @@ public class FiveSpecPaths {
                     .addPath(
                             //place fourth
                             new BezierCurve(
-                                    new Point(6.500, 24.000, Point.CARTESIAN),
+                                    new Point(7.400, 32.000, Point.CARTESIAN),
                                     new Point(15.000, 74.000, Point.CARTESIAN),
-                                    new Point(39.500, 72.500, Point.CARTESIAN)
+                                    new Point(41.000, 72.500, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -146,10 +146,10 @@ public class FiveSpecPaths {
                             // Line 9
                             //pickup 4th
                             new BezierCurve(
-                                    new Point(39.500, 72.500, Point.CARTESIAN),
+                                    new Point(41.000, 72.500, Point.CARTESIAN),
                                     new Point(17.000, 73.000, Point.CARTESIAN),
                                     new Point(35.000, 27.000, Point.CARTESIAN),
-                                    new Point(6.500, 24.000, Point.CARTESIAN)
+                                    new Point(7.40, 32.000, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -159,9 +159,9 @@ public class FiveSpecPaths {
                             // Line 9
                             //place 5th
                             new BezierCurve(
-                                    new Point(6.500, 24.000, Point.CARTESIAN),
+                                    new Point(7.400, 32.000, Point.CARTESIAN),
                                     new Point(15.000, 61.000, Point.CARTESIAN),
-                                    new Point(42.000, 70.000, Point.CARTESIAN)
+                                    new Point(41.000, 70.000, Point.CARTESIAN)
                             )
                     )
                     .setConstantHeadingInterpolation(Math.toRadians(0));
@@ -171,7 +171,7 @@ public class FiveSpecPaths {
                             // Line 9
                             //park
                             new BezierLine(
-                                    new Point(42.000, 70.000, Point.CARTESIAN),
+                                    new Point(41.000, 70.000, Point.CARTESIAN),
                                     new Point(7.500, 40.000, Point.CARTESIAN)
                             )
                     )

@@ -1,18 +1,17 @@
-package org.firstinspires.ftc.teamcode.aRROD.assets;
-
-import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.SERVO_WAIT_TIME;
+package org.firstinspires.ftc.teamcode.aRROD.commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import com.pedropathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.aRROD.assets.Mechanisms;
 
 
 public class commandHolder {
     public SequentialCommandGroup pre_wall_intake(Mechanisms mechs){
         SequentialCommandGroup actions = new SequentialCommandGroup(
+                new InstantCommand(mechs::liftDown),
                new InstantCommand(mechs::armIntake),
                 new InstantCommand(mechs::clawOpen)
 
@@ -24,8 +23,9 @@ public class commandHolder {
     public SequentialCommandGroup actual_wall_intake(Mechanisms mechs){
         SequentialCommandGroup actions = new SequentialCommandGroup(
                 new InstantCommand(mechs::clawClosed),
-                new WaitCommand(200),
-                new InstantCommand(mechs::armScore)
+                new WaitCommand(50),
+                new InstantCommand(mechs::armScore),
+                new InstantCommand(mechs::liftIntermediate)
 
         );
         return  actions;
@@ -34,11 +34,12 @@ public class commandHolder {
 
     public SequentialCommandGroup lift_specimen_score(Mechanisms mechs){
         SequentialCommandGroup actions = new SequentialCommandGroup(
-                new InstantCommand(mechs::liftUp),
+                new InstantCommand(mechs::lift_specimen),
                 new WaitUntilCommand(mechs::liftCloseEnough),
-                new WaitCommand(300),
+                new InstantCommand(mechs::liftDown),
                 new InstantCommand(mechs::clawOpen),
-                new InstantCommand(mechs::liftDown)
+                new InstantCommand(mechs::armIntake)
+
         );
 
         return actions;
@@ -51,11 +52,11 @@ public class commandHolder {
 
 
 
-    public SequentialCommandGroup init(Mechanisms mechs){
+    public SequentialCommandGroup prep_score(Mechanisms mechs){
         SequentialCommandGroup actions = new SequentialCommandGroup(
                 new InstantCommand(mechs::clawClosed),
                 new InstantCommand(mechs::armScore),
-                new InstantCommand(mechs::extendoClose)
+               new InstantCommand(mechs::liftIntermediate)
         );
         return actions;
     }

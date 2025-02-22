@@ -4,11 +4,13 @@ package org.firstinspires.ftc.teamcode.aRROD.assets;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.LENGTH_OF_BEAM;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.PIXELS_PER_INCH;
 import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.ROBOT_OFFSET;
+import static org.firstinspires.ftc.teamcode.aRROD.utils.UTILS.TEAM_COLOR;
 
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.aRROD.utils.UTILS;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
@@ -78,14 +80,14 @@ public class SampleOrientationAnalysisPipeline implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat input, long captureTimeNanos) {
-        //if(TEAM_COLOR == teamColor.RED){
+        if(TEAM_COLOR == UTILS.teamColor.RED){
         CB_CHAN_IDX = 1;
         CB_CHAN_MASK_THRESHOLD = 185;
-        // } else {
-        //CB_CHAN_IDX = 2;
-        //CB_CHAN_MASK_THRESHOLD = 160;
+         } else {
+        CB_CHAN_IDX = 2;
+        CB_CHAN_MASK_THRESHOLD = 160;
 
-        //}
+        }
         // We'll be updating this with new data below
         internalSampleList.clear();
         Size inputSize = input.size();
@@ -132,9 +134,10 @@ public class SampleOrientationAnalysisPipeline implements VisionProcessor {
                 return contoursOnPlainImageMat;
             }
         }
-        if(intersect){
             drawTagText(new RotatedRect(),angleOfSample+"" , input);
-        }
+
+
+
 
         return input;
     }
@@ -222,12 +225,12 @@ public class SampleOrientationAnalysisPipeline implements VisionProcessor {
         // The angle OpenCV gives us can be ambiguous, so look at the shape of
         // the rectangle to fix that.
 
-        if(intersect){
+
             rotRectAngle = rotatedRectFitToContour.angle;
             if (rotatedRectFitToContour.size.width < rotatedRectFitToContour.size.height) {
                 rotRectAngle += 90;
             }
-        }
+
 
         // Figure out the slope of a line which would run through the middle, lengthwise
         // (Slope as in m from 'Y = mx + b')
@@ -272,9 +275,8 @@ public class SampleOrientationAnalysisPipeline implements VisionProcessor {
             angle = (angle - 180);
         }
         angleOfSample = angle;
-        if(intersect){
             drawTagText(rotatedRectFitToContour, Integer.toString((int) Math.round(angle)), input);
-        }
+
 
         AnalyzedSample analyzedSample = new AnalyzedSample();
         analyzedSample.angle = rotRectAngle;
@@ -398,7 +400,7 @@ public class SampleOrientationAnalysisPipeline implements VisionProcessor {
             }
 
 
-            if (intersect && !isAPieceReady) {
+            if (!isAPieceReady) {
                 isAPieceReady = true;
                 Imgproc.line(drawOn, points[i], points[(i + 1) % 4], RED, 2);
                 double xMidIntake = intakeArea.x + 0.5 * intakeArea.width;
@@ -426,5 +428,6 @@ public class SampleOrientationAnalysisPipeline implements VisionProcessor {
 
     public double getSwivelAngle(){return Math.cos(xChange*PIXELS_PER_INCH/LENGTH_OF_BEAM)+ angleOfSample;}
     public double getExtendoLength(){return ROBOT_OFFSET + yChange*PIXELS_PER_INCH - Math.sqrt(Math.pow(LENGTH_OF_BEAM, 2) + Math.pow(xChange, 2));}
+    public double getAngleOfSample(){return angleOfSample;}
 }
 
